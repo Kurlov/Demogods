@@ -1,0 +1,10 @@
+{
+  "uuid": "49a1d18e-a466-470b-88aa-589089e2d5d6",
+  "name": "Fire Elemental",
+  "damage": 5,
+  "health": 3,
+  "cost": 4,
+  "type": 0,
+  "effects": [],
+  "description": "My fire is hot, scrub!"
+}
