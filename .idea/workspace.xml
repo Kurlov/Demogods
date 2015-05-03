@@ -2,11 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1348f65e-909a-4fd6-8b40-4980c2b28ef0" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/common/img/1478a399-fd29-4073-9158-ee41621c3a8a.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/common/img/26fb2ccd-c798-4a48-a7ed-3e74489a7cb8.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/common/data/1478a399-fd29-4073-9158-ee41621c3a8a.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/common/data/26fb2ccd-c798-4a48-a7ed-3e74489a7cb8.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/core.py" afterPath="$PROJECT_DIR$/src/core.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Demogods.iws" />
@@ -485,7 +480,13 @@
       <option name="project" value="LOCAL" />
       <updated>1430650585354</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added new cards">
+      <created>1430661068544</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1430661068544</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
