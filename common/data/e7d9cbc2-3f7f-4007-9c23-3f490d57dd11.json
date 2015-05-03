@@ -1,0 +1,10 @@
+{
+  "uuid": "e7d9cbc2-3f7f-4007-9c23-3f490d57dd11",
+  "name": "Water Elemental",
+  "damage": 3,
+  "health": 5,
+  "cost": 4,
+  "type": 0,
+  "effects": [],
+  "description": "Water down, my friend"
+}
