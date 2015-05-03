@@ -1,0 +1,10 @@
+{
+  "uuid": "26fb2ccd-c798-4a48-a7ed-3e74489a7cb8",
+  "name": "Earth Elemental",
+  "damage": 4,
+  "health": 4,
+  "cost": 4,
+  "type": 0,
+  "effects": [],
+  "description": "I am Earth"
+}

@@ -1,0 +1,10 @@
+{
+  "uuid": "1478a399-fd29-4073-9158-ee41621c3a8a",
+  "name": "Wind Elemental",
+  "damage": 4,
+  "health": 4,
+  "cost": 4,
+  "type": 0,
+  "effects": [],
+  "description": "I soar"
+}
