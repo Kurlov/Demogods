@@ -5,4 +5,4 @@
 # Home page
 GET        /findMatch/:userId            controllers.Login.findMatch(userId: String)
 
-GET        /game/:matchId/:userId        controllers.Game.showGame(gameId: String, userId: String)
+GET        /game/:matchId/:userId        controllers.Game.showGame(matchId: String, userId: String)
