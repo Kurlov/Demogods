@@ -1,8 +1,10 @@
+package session
+
 import java.util.UUID
 
-import org.scalatest._
-import actors.session.SocketProtocol._
 import actors.session.PlayJsonSocketHelper
+import actors.session.SocketProtocol._
+import org.scalatest._
 
 class SocketProtocolSpec extends FlatSpec with Matchers {
 
@@ -32,7 +34,7 @@ class SocketProtocolSpec extends FlatSpec with Matchers {
   }
 
   it should "correctly serialize GameFound" in {
-    test(GameFound(UUID.randomUUID(), UUID.randomUUID()))
+    test(GameFound(UUID.randomUUID(), "foo"))
   }
 
   it should "correctly serialize GamePaused" in {
