@@ -12,6 +12,8 @@ trait PlayJsonSocketHelper extends JsonSocketHelper {
   private implicit val CardPulledFormat = Json.format[CardPulled]
   private implicit val EnemyCardThrownFormat = Json.format[EnemyCardThrown]
   private implicit val EnemyCreatureAppliedFormat = Json.format[EnemyCreatureApplied]
+  private implicit val CreatureRaisedFormat = Json.format[CreatureRaised]
+  private implicit val EnemyCreatureRaisedFormat = Json.format[EnemyCreatureRaised]
 
   private def readDataToWSM[T : Reads]: Reads[WebSocketMessage] =
     (__ \ "data").read[T].asInstanceOf[Reads[WebSocketMessage]]
@@ -20,6 +22,7 @@ trait PlayJsonSocketHelper extends JsonSocketHelper {
     import Reads.pure
     (__ \ "type").read[String].flatMap[WebSocketMessage] {
       case "FindGame" => pure(FindGame)
+      case "StartGame" => pure(StartGame)
       case "ExitGame" => pure(ExitGame)
       case "ThrowCard" => readDataToWSM[ThrowCard]
       case "ApplyCreature" => readDataToWSM[ApplyCreature]
@@ -35,6 +38,8 @@ trait PlayJsonSocketHelper extends JsonSocketHelper {
       case "EnemyCardPulled" => pure(EnemyCardPulled)
       case "EnemyTurnFinished" => pure(EnemyTurnFinished)
       case "EnemyDisconnected" => pure(EnemyDisconnected)
+      case "CreatureRaised" => readDataToWSM[CreatureRaised]
+      case "EnemyCreatureRaised" => readDataToWSM[EnemyCreatureRaised]
     }
   }
 
@@ -44,6 +49,7 @@ trait PlayJsonSocketHelper extends JsonSocketHelper {
   private implicit val wsmWrites = new Writes[WebSocketMessage] {
     def writes(wsm: WebSocketMessage) = wsm match {
       case FindGame => objWrites("FindGame")
+      case StartGame => objWrites("StartGame")
       case ExitGame => objWrites("ExitGame")
       case tc: ThrowCard => classWrites(tc)
       case ac: ApplyCreature => classWrites(ac)
@@ -59,6 +65,8 @@ trait PlayJsonSocketHelper extends JsonSocketHelper {
       case EnemyCardPulled => objWrites("EnemyCardPulled")
       case EnemyTurnFinished => objWrites("EnemyTurnFinished")
       case EnemyDisconnected => objWrites("EnemyDisconnected")
+      case cr: CreatureRaised => classWrites(cr)
+      case ecr: EnemyCreatureRaised => classWrites(ecr)
     }
   }
 

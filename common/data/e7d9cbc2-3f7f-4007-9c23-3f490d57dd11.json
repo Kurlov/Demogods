@@ -4,7 +4,7 @@
   "damage": 3,
   "health": 5,
   "cost": 4,
-  "type": 0,
+  "type": "creature",
   "effects": [],
   "description": "Water down, my friend"
 }

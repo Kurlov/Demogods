@@ -1,15 +1,11 @@
 package models.cards
 
-import play.api.libs.json.Json
+import java.util.UUID
 
 
-case class CreatureCard(uuid: String,
+case class CreatureCard(id: UUID,
                         name: String,
                         description: String,
-                        attack: Int,
+                        damage: Int,
                         health: Int,
                         cost: Int) extends Card
-
-case object CreatureCard {
-  implicit val creatureCardFormat = Json.format[CreatureCard]
-}

@@ -4,7 +4,7 @@
   "damage": 5,
   "health": 3,
   "cost": 4,
-  "type": 0,
+  "type": "creature",
   "effects": [],
   "description": "My fire is hot, scrub!"
 }

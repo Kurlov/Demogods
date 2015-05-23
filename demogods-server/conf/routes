@@ -3,6 +3,4 @@
 # ~~~~
 
 # Home page
-GET         /findMatch/:userId        controllers.Login.findMatch(userId: String)
-
-POST        /gameState                controllers.Game.showGame
+GET         /findMatch/:userId        controllers.Application.connect(userId: String)

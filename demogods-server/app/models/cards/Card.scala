@@ -1,8 +1,8 @@
 package models.cards
 
-import play.api.libs.json.{Format, Json}
+import java.util.UUID
 
 
 trait Card {
-  def uuid: String
+  def id: UUID
 }

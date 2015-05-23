@@ -1,13 +1,12 @@
 package actors.session
 
-import actors.messages.UserConnected
-import actors.session.SocketActor.HereIsYourSession
+import actors.session.SocketHandler.HereIsYourSession
 import akka.actor._
 import models.user.UserId
 import play.api.libs.json.JsValue
 
 
-class SocketActor(userId: UserId, out: ActorRef, sessionManager: ActorRef) extends Actor with ActorLogging with Stash {
+class SocketHandler(userId: UserId, out: ActorRef, sessionManager: ActorRef) extends Actor with ActorLogging with Stash {
   this: JsonSocketHelper =>
 
   import SocketProtocol._
@@ -15,6 +14,7 @@ class SocketActor(userId: UserId, out: ActorRef, sessionManager: ActorRef) exten
   def receive = {
     case HereIsYourSession(sessionRef) =>
       unstashAll()
+      context.watch(sessionRef)
       context.become({
         case json: JsValue =>
           fromJson(json) match {
@@ -24,19 +24,21 @@ class SocketActor(userId: UserId, out: ActorRef, sessionManager: ActorRef) exten
 
         case se: ServerEvent =>
           out ! toJson(se)
+
+        case Terminated(session) => sessionManager ! SessionManager.UserConnected(userId)
       })
 
     case msg => stash()
   }
 
   override def preStart() = {
-    sessionManager ! UserConnected(userId)
+    sessionManager ! SessionManager.UserConnected(userId)
   }
 }
 
-object SocketActor {
+object SocketHandler {
   def props(userId: UserId, out: ActorRef, sessionManager: ActorRef) =
-    Props(new SocketActor(userId, out, sessionManager) with PlayJsonSocketHelper)
+    Props(new SocketHandler(userId, out, sessionManager) with PlayJsonSocketHelper)
 
   case class HereIsYourSession(session: ActorRef)
 }

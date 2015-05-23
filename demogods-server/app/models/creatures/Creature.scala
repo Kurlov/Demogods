@@ -1,13 +1,9 @@
 package models.creatures
 
-import play.api.libs.json.Json
+import java.util.UUID
 
 
-case class Creature(uuid: String,
-                    cardId: String,
+case class Creature(id: UUID,
+                    cardId: UUID,
                     attack: Int,
                     hp: Int)
-
-object Creature {
-  implicit val creatureFormat = Json.format[Creature]
-}

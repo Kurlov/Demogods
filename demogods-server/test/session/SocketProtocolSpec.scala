@@ -21,6 +21,10 @@ class SocketProtocolSpec extends FlatSpec with Matchers {
     test(ExitGame)
   }
 
+  it should "correctly serialize StartGame" in {
+    test(StartGame)
+  }
+
   it should "correctly serialize ThrowCard" in {
     test(ThrowCard(UUID.randomUUID()))
   }
@@ -34,7 +38,7 @@ class SocketProtocolSpec extends FlatSpec with Matchers {
   }
 
   it should "correctly serialize GameFound" in {
-    test(GameFound(UUID.randomUUID(), "foo"))
+    test(GameFound("foo"))
   }
 
   it should "correctly serialize GamePaused" in {
@@ -75,6 +79,14 @@ class SocketProtocolSpec extends FlatSpec with Matchers {
 
   it should "correctly serialize EnemyDisconnected" in {
     test(EnemyDisconnected)
+  }
+
+  it should "correctly serialize CreatureRaised" in {
+    test(CreatureRaised(UUID.randomUUID(), UUID.randomUUID()))
+  }
+
+  it should "correctly serialize EnemyCreatureRaised" in {
+    test(EnemyCreatureRaised(UUID.randomUUID(), UUID.randomUUID()))
   }
 
 }

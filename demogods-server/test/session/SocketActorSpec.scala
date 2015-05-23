@@ -2,9 +2,8 @@ package session
 
 import java.util.UUID
 
-import actors.messages.UserConnected
-import actors.session.{SocketProtocol, PlayJsonSocketHelper, SocketActor}
-import actors.session.SocketActor.HereIsYourSession
+import actors.session.{SessionManager, SocketProtocol, PlayJsonSocketHelper, SocketHandler}
+import actors.session.SocketHandler.HereIsYourSession
 import models.user.UserId
 import org.scalatest._
 import akka.actor._
@@ -28,26 +27,26 @@ class SocketActorSpec(_system: ActorSystem) extends TestKit(_system) with Implic
     val outProbe = TestProbe()
     val sessionMangerProbe = TestProbe()
     val sessionProbe = TestProbe()
-    val socket = system.actorOf(SocketActor.props(userId, outProbe.ref, sessionMangerProbe.ref))
+    val socket = system.actorOf(SocketHandler.props(userId, outProbe.ref, sessionMangerProbe.ref))
     socket ! HereIsYourSession(sessionProbe.ref)
     (socket, outProbe, sessionMangerProbe, sessionProbe)
   }
 
 
-  "An SocketActor actor" must {
+  "A SocketActor actor" must {
 
     "send UserConnected messages to session manager on start" in {
       val outProbe = TestProbe()
       val sessionMangerProbe = TestProbe()
-      system.actorOf(SocketActor.props(userId, outProbe.ref, sessionMangerProbe.ref))
-      sessionMangerProbe.expectMsg(UserConnected(userId))
+      system.actorOf(SocketHandler.props(userId, outProbe.ref, sessionMangerProbe.ref))
+      sessionMangerProbe.expectMsg(SessionManager.UserConnected(userId))
     }
 
     "use received session" in {
       val outProbe = TestProbe()
       val sessionMangerProbe = TestProbe()
       val sessionProbe = TestProbe()
-      val socket = system.actorOf(SocketActor.props(userId, outProbe.ref, sessionMangerProbe.ref))
+      val socket = system.actorOf(SocketHandler.props(userId, outProbe.ref, sessionMangerProbe.ref))
       socket ! HereIsYourSession(sessionProbe.ref)
       socket ! jsonHelper.toJson(SocketProtocol.FindGame)
       sessionProbe.expectMsg(SocketProtocol.FindGame)
@@ -60,7 +59,7 @@ class SocketActorSpec(_system: ActorSystem) extends TestKit(_system) with Implic
     }
 
     "reject ServerEvent as json" in {
-      val gameFound = SocketProtocol.GameFound(UUID.randomUUID(), "foo")
+      val gameFound = SocketProtocol.GameFound("foo")
       val (socket, outProbe, sessionMangerProbe, sessionProbe) = socketAndEnvironment
       val json = jsonHelper.toJson(gameFound)
       val wrappedJson = jsonHelper.wrapUnknown(json)
@@ -70,7 +69,7 @@ class SocketActorSpec(_system: ActorSystem) extends TestKit(_system) with Implic
     }
 
     "accept ServerEvent as case class" in {
-      val gameFound = SocketProtocol.GameFound(UUID.randomUUID(), "foo")
+      val gameFound = SocketProtocol.GameFound("foo")
       val (socket, outProbe, sessionMangerProbe, sessionProbe) = socketAndEnvironment
       val json = jsonHelper.toJson(gameFound)
       socket ! gameFound

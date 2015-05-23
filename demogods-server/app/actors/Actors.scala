@@ -1,9 +1,11 @@
 package actors
 
-import actors.matchMaking.MatchMaker
+import actors.gameFinding.GameFinder
+import actors.session.SessionManager
 import play.api.libs.concurrent.Akka
 import play.api.Play.current
 
 object Actors {
-  val matchMaker = Akka.system.actorOf(MatchMaker.props(), MatchMaker.name)
+  val gameFinder = Akka.system.actorOf(GameFinder.props(), GameFinder.name)
+  val sessionManager = Akka.system.actorOf(SessionManager.props(gameFinder), SessionManager.name)
 }

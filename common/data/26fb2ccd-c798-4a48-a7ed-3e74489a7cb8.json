@@ -4,7 +4,7 @@
   "damage": 4,
   "health": 4,
   "cost": 4,
-  "type": 0,
+  "type": "creature",
   "effects": [],
   "description": "I am Earth"
 }
