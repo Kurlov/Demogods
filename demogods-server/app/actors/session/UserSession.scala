@@ -69,7 +69,6 @@ class UserSession(userId: UserId, gameFinder: ActorRef) extends FSM[State, Data]
 
   onTransition {
     case PlayingGame -> WaitingToReconnect =>
-      println("timeout: " + reconnectionTimeout)
       stateData match {
         case g: ConnectedBattle => g.battleRef ! UserDisconnected
       }

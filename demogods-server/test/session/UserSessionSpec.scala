@@ -22,8 +22,6 @@ class UserSessionSpec(_system: ActorSystem) extends TestKit(_system) with Implic
     TestKit.shutdownActorSystem(system)
   }
 
-  ConfigFactory.invalidateCaches()
-
   val userId = UserId(UUID.randomUUID())
   val name = "player"
 
@@ -126,6 +124,4 @@ class UserSessionSpec(_system: ActorSystem) extends TestKit(_system) with Implic
       probe.expectTerminated(session, 200 millis)
     }
   }
-
-
 }

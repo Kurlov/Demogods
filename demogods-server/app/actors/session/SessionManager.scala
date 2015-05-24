@@ -1,16 +1,16 @@
 package actors.session
 
-import akka.actor.{Props, ActorRef, Actor}
+import akka.actor.{ActorRefFactory, Props, ActorRef, Actor}
 import models.user.UserId
 
-class SessionManager(gameFinder: ActorRef) extends Actor {
+class SessionManager(sessionMaker: (ActorRefFactory, UserId, UserId => String) => ActorRef) extends Actor {
   import SessionManager._
 
   def receive = {
     case UserConnected(userId) =>
       val socket = sender()
       val session = context.child(sessionName(userId)) getOrElse
-        context.actorOf(UserSession.props(userId, gameFinder), sessionName(userId))
+        sessionMaker(context, userId, sessionName)
       completeConnection(socket, session)
   }
 
@@ -19,12 +19,12 @@ class SessionManager(gameFinder: ActorRef) extends Actor {
     socket ! SocketHandler.HereIsYourSession(session)
   }
 
-  private def sessionName(userId: UserId): String = s"session-$userId"
+  def sessionName(userId: UserId): String = s"session-$userId"
 }
 
 object SessionManager {
   case class UserDisconnected(userId: UserId)
   case class UserConnected(userId: UserId)
-  def props(gameFinder: ActorRef) = Props(classOf[SessionManager], gameFinder)
+  def props(sessionMaker: (ActorRefFactory, UserId, UserId => String) => ActorRef) = Props(classOf[SessionManager], sessionMaker)
   val name = "sessionManger"
 }
