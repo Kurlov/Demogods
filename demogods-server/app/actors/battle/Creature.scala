@@ -1,0 +1,102 @@
+package actors.battle
+
+import java.util.UUID
+
+import akka.actor._
+import models.cards.CreatureCard
+
+
+class Creature(card: CreatureCard, battle: ActorRef)
+  extends FSM[Creature.State, Creature.Data] {
+
+  import Creature._
+  import BattleLogic._
+
+  //check name validity
+  UUID.fromString(self.path.name)
+
+  startWith(State.Inactive, Data.Stats(hp = card.health, attack = card.damage))
+
+  when(State.Inactive) {
+    case Event(Commands.WakeUp, _) =>
+      goto(State.Active)
+    case Event(IncomingAttack(damage), s: Data.Stats) => withHpCheck {
+      stay using attacked(damage, s)
+    }
+  }
+
+  when(State.Active) {
+    case Event(Commands.AttackTarget(target), s: Data.Stats) => withHpCheck {
+      target ! IncomingAttack(s.attack)
+      goto(State.Inactive)
+    }
+
+    case Event(IncomingAttack(damage), s: Data.Stats) => withHpCheck {
+      stay using attacked(damage, s) replying Counterattack(s.attack)
+    }
+  }
+
+  when(State.Dead) {
+    //ignore because dead
+    case Event(Counterattack(damage), _) =>
+      stay
+  }
+
+  whenUnhandled {
+    case Event(Counterattack(damage), s: Data.Stats) => withHpCheck {
+      stay using attacked(damage, s)
+    }
+  }
+
+  onTransition {
+    case _ -> State.Dead =>
+      battle ! Events.Died(self.path.name.asUUID)
+  }
+
+  def attacked(damage: Int, s: Data.Stats) = {
+    battle ! Events.Attacked(self.path.name.asUUID, damage)
+    s.copy(hp = s.hp - damage)
+  }
+
+  def withHpCheck(block: => State): State = {
+    val state = block
+    state.stateData match {
+      case s: Data.Stats if s.hp <= 0 =>
+        state.copy(stateName = State.Dead)
+      case _ => state
+    }
+  }
+}
+
+object Creature {
+
+  private implicit class StringOps(val s: String) extends AnyVal {
+    def asUUID: UUID = UUID.fromString(s)
+  }
+
+  sealed trait State
+  private[battle] object State {
+    case object Inactive extends State
+    case object Active extends State
+    case object Dead extends State
+  }
+
+  sealed trait Data
+  private[battle] object Data {
+    case class Stats(hp: Int, attack: Int, extraAttacks: Int = 0) extends Data
+  }
+
+  object Commands {
+    case object WakeUp
+    case class AttackTarget(target: ActorSelection)
+  }
+
+  object Events {
+    case class Died(uuid: UUID)
+    case class Attacked(uuid: UUID, amount: Int)
+  }
+
+  def props(card: CreatureCard, battle: ActorRef) =
+    Props(new Creature(card, battle))
+
+}
