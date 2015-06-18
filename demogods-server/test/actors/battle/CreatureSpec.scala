@@ -6,13 +6,15 @@ import actors.battle.BattleLogic.{Counterattack, IncomingAttack}
 import akka.actor.{ActorSelection, ActorSystem}
 import akka.testkit._
 import models.cards.CreatureCard
-import org.scalatest.{ParallelTestExecution, BeforeAndAfterAll, Matchers, WordSpecLike}
+import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import concurrent.duration._
 
 class CreatureSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitSender with WordSpecLike
   with Matchers with BeforeAndAfterAll {
 
   import Creature._
+  import actors.battle.CreatureEvent
+  import actors.battle.CreatureEvents._
 
   def this() = this(ActorSystem("CreatureSpec"))
 
@@ -23,12 +25,19 @@ class CreatureSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitS
   class CreatureEnv {
     val creatureUUID = UUID.randomUUID()
     val creatureName = creatureUUID.toString
-    val battleProbe = TestProbe()
+    val battleId = UUID.randomUUID()
+    implicit val battleContext = BattleContext(battleId)
+    val eventBus = new PubSub {}
+    val listener = TestProbe()
+    eventBus.subscribe(listener.ref, classOf[CreatureEvent])
+
     val initAttack = 3
     val initHp = 6
     val cardCost = 3
     val card = CreatureCard(UUID.randomUUID(), "testCard", "testCardDescription", initAttack, initHp, cardCost)
-    val creature = TestFSMRef(new Creature(card, battleProbe.ref), creatureName)
+    val creature = TestFSMRef(new Creature(card), creatureName)
+
+    listener.expectMsg(CreatureRaised(card, creature))
   }
 
   class InactiveCreature extends CreatureEnv {
@@ -49,8 +58,9 @@ class CreatureSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitS
     creature ! IncomingAttack(damage)
     creature.stateName should be (State.Dead)
     creature.stateData should be (Data.Stats(initHp-damage, initAttack))
-    battleProbe.expectMsg(Events.Attacked(creatureUUID, damage))
-    battleProbe.expectMsg(Events.Died(creatureUUID))
+
+    listener.expectMsg(CreatureDamaged(creature, damage))
+    listener.expectMsg(CreatureDied(creature))
   }
 
   "A Creature actor" must {
@@ -63,7 +73,7 @@ class CreatureSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val damage = 1
       creature ! IncomingAttack(damage)
       creature.stateData should be (Data.Stats(initHp-damage, initAttack))
-      battleProbe.expectMsg(Events.Attacked(creatureUUID, damage))
+      listener.expectMsg(CreatureDamaged(creature, damage))
       expectNoMsg(100.millis)
     }
 
@@ -78,7 +88,7 @@ class CreatureSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val damage = 1
       creature ! IncomingAttack(damage)
       creature.stateData should be (Data.Stats(initHp-damage, initAttack))
-      battleProbe.expectMsg(Events.Attacked(creatureUUID, damage))
+      listener.expectMsg(CreatureDamaged(creature, damage))
       creature.stateName should be (State.Active)
       expectMsg(Counterattack(initAttack))
     }

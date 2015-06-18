@@ -4,17 +4,17 @@ import java.util.UUID
 
 import akka.actor._
 import models.cards.CreatureCard
+import CreatureEvents._
 
-
-class Creature(card: CreatureCard, battle: ActorRef)
-  extends FSM[Creature.State, Creature.Data] {
+class Creature(card: CreatureCard)(implicit battleContext: BattleContext)
+  extends FSM[Creature.State, Creature.Data] with PubSub {
 
   import Creature._
   import BattleLogic._
 
   //check name validity
   UUID.fromString(self.path.name)
-
+  publish(CreatureRaised(card, self))
   startWith(State.Inactive, Data.Stats(hp = card.health, attack = card.damage))
 
   when(State.Inactive) {
@@ -50,11 +50,13 @@ class Creature(card: CreatureCard, battle: ActorRef)
 
   onTransition {
     case _ -> State.Dead =>
-      battle ! Events.Died(self.path.name.asUUID)
+      publish(CreatureDied(self))
   }
 
+  initialize()
+
   def attacked(damage: Int, s: Data.Stats) = {
-    battle ! Events.Attacked(self.path.name.asUUID, damage)
+    publish(CreatureDamaged(self, damage))
     s.copy(hp = s.hp - damage)
   }
 
@@ -91,12 +93,7 @@ object Creature {
     case class AttackTarget(target: ActorSelection)
   }
 
-  object Events {
-    case class Died(uuid: UUID)
-    case class Attacked(uuid: UUID, amount: Int)
-  }
-
-  def props(card: CreatureCard, battle: ActorRef) =
-    Props(new Creature(card, battle))
+  def props(card: CreatureCard, battle: ActorRef)(implicit battleContext: BattleContext) =
+    Props(new Creature(card)(battleContext))
 
 }
