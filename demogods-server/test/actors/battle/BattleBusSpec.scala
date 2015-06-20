@@ -30,6 +30,4 @@ with Matchers with BeforeAndAfterAll {
       probe.expectMsg(msg.payload)
     }
   }
-
-
 }

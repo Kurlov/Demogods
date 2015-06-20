@@ -99,15 +99,14 @@ class CreatureSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitS
 
     "attack other creature when received attack command" in new ActiveCreature {
       val targetCreatureProbe = TestProbe()
-      val targetSelection = ActorSelection(targetCreatureProbe.ref, Iterable.empty)
-      creature ! Commands.AttackTarget(targetSelection)
+      creature ! Commands.AttackTarget(targetCreatureProbe.ref.path)
+      listener.expectMsg(CreatureAttacked(creature.path, targetCreatureProbe.ref.path))
       targetCreatureProbe.expectMsg(IncomingAttack(initAttack))
     }
 
     "become inactive after attack" in new ActiveCreature {
       val targetCreatureProbe = TestProbe()
-      val targetSelection = ActorSelection(targetCreatureProbe.ref, Iterable.empty)
-      creature ! Commands.AttackTarget(targetSelection)
+      creature ! Commands.AttackTarget(targetCreatureProbe.ref.path)
       creature.stateName should be (State.Inactive)
     }
 

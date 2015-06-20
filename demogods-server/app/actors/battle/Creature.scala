@@ -27,7 +27,8 @@ class Creature(card: CreatureCard)(implicit battleContext: BattleContext)
 
   when(State.Active) {
     case Event(Commands.AttackTarget(target), s: Data.Stats) => withHpCheck {
-      target ! IncomingAttack(s.attack)
+      publish(CreatureAttacked(self.path, target))
+      context.actorSelection(target) ! IncomingAttack(s.attack)
       goto(State.Inactive)
     }
 
@@ -72,10 +73,6 @@ class Creature(card: CreatureCard)(implicit battleContext: BattleContext)
 
 object Creature {
 
-  private implicit class StringOps(val s: String) extends AnyVal {
-    def asUUID: UUID = UUID.fromString(s)
-  }
-
   sealed trait State
   private[battle] object State {
     case object Inactive extends State
@@ -90,7 +87,7 @@ object Creature {
 
   object Commands {
     case object WakeUp
-    case class AttackTarget(target: ActorSelection)
+    case class AttackTarget(target: ActorPath)
   }
 
   def props(card: CreatureCard, battle: ActorRef)(implicit battleContext: BattleContext) =
