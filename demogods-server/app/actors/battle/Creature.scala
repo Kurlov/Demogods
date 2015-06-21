@@ -6,15 +6,18 @@ import akka.actor._
 import models.cards.CreatureCard
 import CreatureEvents._
 
+import scala.util.Try
+
 class Creature(card: CreatureCard)(implicit battleContext: BattleContext)
   extends FSM[Creature.State, Creature.Data] with PubSub {
 
   import Creature._
   import BattleLogic._
 
-  //check name validity
-  UUID.fromString(self.path.name)
+  require(Try(UUID.fromString(self.path.name)).toOption.nonEmpty, "name must be a valid UUID")
+
   publish(CreatureRaised(card, self))
+
   startWith(State.Inactive, Data.Stats(hp = card.health, attack = card.damage))
 
   when(State.Inactive) {

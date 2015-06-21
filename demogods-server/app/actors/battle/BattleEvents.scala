@@ -17,3 +17,12 @@ object CreatureEvents {
   case class CreatureDied(creature: ActorRef) extends CreatureEvent
 
 }
+
+private [battle] sealed trait HeroEvent
+
+object HeroEvents {
+
+  case class HeroDamaged(hero: ActorRef, damage: Int) extends HeroEvent
+
+  case class HeroDied(hero: ActorRef) extends HeroEvent
+}
