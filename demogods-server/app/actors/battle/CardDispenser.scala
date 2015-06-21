@@ -1,11 +1,12 @@
 package actors.battle
 
-import actors.battle.CardDispenser.{CardPulled, PullCard}
+import actors.battle.CardDispenser.PullCard
 import akka.actor.{Props, ActorRef, Actor}
 import models.cards.Card
+import DispenserEvents.CardPulled
 
 
-class CardDispenser(player: ActorRef, session: ActorRef, cards: Seq[Card]) extends Actor {
+class CardDispenser(cards: Seq[Card])(implicit battleContext: BattleContext) extends Actor with PubSub {
 
   def receive = working(cards)
 
@@ -13,17 +14,15 @@ class CardDispenser(player: ActorRef, session: ActorRef, cards: Seq[Card]) exten
     case PullCard =>
       val maybeCard = remainingCards.headOption
       maybeCard.foreach { card =>
-        player ! CardPulled(card)
-        session ! CardPulled(card)
+        publish(CardPulled(card))
         context.become(working(remainingCards.tail))
       }
   }
 }
 
 object CardDispenser {
-  def props(player: ActorRef, session: ActorRef, cards: Seq[Card]) =
-    Props(classOf[CardDispenser], player, session, cards)
+  def props(cards: Seq[Card])(implicit battleContext: BattleContext) =
+    Props(classOf[CardDispenser],cards)
 
   case object PullCard
-  case class CardPulled(card: Card)
 }

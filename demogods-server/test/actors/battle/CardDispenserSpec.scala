@@ -7,6 +7,7 @@ import akka.testkit._
 import models.cards.CreatureCard
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import concurrent.duration._
+import DispenserEvents.CardPulled
 
 class CardDispenserSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitSender with WordSpecLike
   with Matchers with BeforeAndAfterAll {
@@ -18,8 +19,11 @@ class CardDispenserSpec(_system: ActorSystem) extends TestKit(_system) with Impl
   }
 
   class DispenserEnv {
-    val playerProbe = TestProbe()
-    val sessionProbe = TestProbe()
+    val battleId = UUID.randomUUID()
+    implicit val battleContext = BattleContext(battleId)
+    val eventBus = new PubSub {}
+    val listener = TestProbe()
+    eventBus.subscribe(listener.ref, classOf[HeroEvent])
     val cards =
       Seq(
         CreatureCard(
@@ -38,26 +42,22 @@ class CardDispenserSpec(_system: ActorSystem) extends TestKit(_system) with Impl
           6
         )
       )
-    val dispenser = system.actorOf(CardDispenser.props(playerProbe.ref, sessionProbe.ref, cards))
+    val dispenser = system.actorOf(CardDispenser.props(cards))
   }
 
   "Card dispenser" must {
     "give the card when requested" in new DispenserEnv {
       dispenser ! CardDispenser.PullCard
-      playerProbe.expectMsg(CardDispenser.CardPulled(cards.head))
-      sessionProbe.expectMsg(CardDispenser.CardPulled(cards.head))
+      listener.expectMsg(CardPulled(cards.head))
     }
 
     "give no card when empty" in new DispenserEnv {
       dispenser ! CardDispenser.PullCard
-      playerProbe.expectMsg(CardDispenser.CardPulled(cards.head))
-      sessionProbe.expectMsg(CardDispenser.CardPulled(cards.head))
+      listener.expectMsg(CardPulled(cards.head))
       dispenser ! CardDispenser.PullCard
-      playerProbe.expectMsg(CardDispenser.CardPulled(cards(1)))
-      sessionProbe.expectMsg(CardDispenser.CardPulled(cards(1)))
+      listener.expectMsg(CardPulled(cards(1)))
       dispenser ! CardDispenser.PullCard
-      playerProbe.expectNoMsg(100.millis)
-      sessionProbe.expectNoMsg(100.millis)
+      listener.expectNoMsg(100.millis)
     }
   }
 }

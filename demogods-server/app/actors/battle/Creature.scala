@@ -93,7 +93,7 @@ object Creature {
     case class AttackTarget(target: ActorPath)
   }
 
-  def props(card: CreatureCard, battle: ActorRef)(implicit battleContext: BattleContext) =
+  def props(card: CreatureCard)(implicit battleContext: BattleContext) =
     Props(new Creature(card)(battleContext))
 
 }
