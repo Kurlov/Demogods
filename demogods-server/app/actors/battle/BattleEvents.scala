@@ -2,7 +2,7 @@ package actors.battle
 
 
 import akka.actor._
-import models.cards.CreatureCard
+import models.cards.{Card, CreatureCard}
 
 private [battle] sealed trait CreatureEvent
 
@@ -25,4 +25,12 @@ object HeroEvents {
   case class HeroDamaged(hero: ActorRef, damage: Int) extends HeroEvent
 
   case class HeroDied(hero: ActorRef) extends HeroEvent
+}
+
+private [battle] sealed trait DispenserEvent
+
+object DispenserEvents {
+
+  case class CardPulled(card: Card) extends DispenserEvent
+
 }
