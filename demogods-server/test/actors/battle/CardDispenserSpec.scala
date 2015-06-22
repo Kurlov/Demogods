@@ -42,20 +42,20 @@ class CardDispenserSpec(_system: ActorSystem) extends TestKit(_system) with Impl
           6
         )
       )
-    val dispenser = system.actorOf(CardDispenser.props(cards))
+    val dispenser = system.actorOf(CardDispenser.props(listener.ref, cards))
   }
 
   "Card dispenser" must {
     "give the card when requested" in new DispenserEnv {
       dispenser ! CardDispenser.PullCard
-      listener.expectMsg(CardPulled(cards.head))
+      listener.expectMsg(CardPulled(cards.head, listener.ref))
     }
 
     "give no card when empty" in new DispenserEnv {
       dispenser ! CardDispenser.PullCard
-      listener.expectMsg(CardPulled(cards.head))
+      listener.expectMsg(CardPulled(cards.head, listener.ref))
       dispenser ! CardDispenser.PullCard
-      listener.expectMsg(CardPulled(cards(1)))
+      listener.expectMsg(CardPulled(cards(1), listener.ref))
       dispenser ! CardDispenser.PullCard
       listener.expectNoMsg(100.millis)
     }

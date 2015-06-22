@@ -31,6 +31,6 @@ private [battle] sealed trait DispenserEvent
 
 object DispenserEvents {
 
-  case class CardPulled(card: Card) extends DispenserEvent
+  case class CardPulled(card: Card, player: ActorRef) extends DispenserEvent
 
 }

@@ -7,7 +7,6 @@ import models.cards.{CreatureCard, Card}
 
 
 class Player(battle: ActorRef,
-             dispenserMaker: ActorRefFactory => ActorRef,
              creatureMaker: (ActorRefFactory, CreatureCard, UUID) => ActorRef)
   extends Actor {
 
@@ -22,13 +21,12 @@ class Player(battle: ActorRef,
   var energy = PlayerEnergy(current = InitEnergy, available = InitEnergy, maxPossible = maxPossibleEnergy)
   var cards = List.empty[Card]
   var creatures = List.empty[CreatureRef]
-  val dispenser = dispenserMaker(context)
 
   def receive = {
     case YourTurn => handleNewTurn()
     case Battle.Commands.ActivateCard(cardId) =>
       cards.find(_.id == cardId).foreach(activateCard)
-    case CardPulled(card) => cards = card :: cards
+    case CardPulled(card, player) if player == self => cards = card :: cards
     case TurnFinished => handleFinishedTurn()
       
   }
@@ -43,7 +41,6 @@ class Player(battle: ActorRef,
 
   def handleNewTurn() = {
     energy = energy.increased.full
-    dispenser ! CardDispenser.PullCard
   }
 
   def handleFinishedTurn() = {
@@ -53,9 +50,8 @@ class Player(battle: ActorRef,
 
 object Player {
   def props(battle: ActorRef,
-            dispenserMaker: ActorRefFactory => ActorRef,
             creatureMaker: (ActorRefFactory, CreatureCard, UUID) => ActorRef) =
-    Props(new Player(battle, dispenserMaker, creatureMaker))
+    Props(new Player(battle, creatureMaker))
 
   case object YourTurn
   case object TurnFinished

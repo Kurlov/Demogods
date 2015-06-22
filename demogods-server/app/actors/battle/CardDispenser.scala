@@ -6,7 +6,7 @@ import models.cards.Card
 import DispenserEvents.CardPulled
 
 
-class CardDispenser(cards: Seq[Card])(implicit battleContext: BattleContext) extends Actor with PubSub {
+class CardDispenser(player: ActorRef, cards: Seq[Card])(implicit battleContext: BattleContext) extends Actor with PubSub {
 
   def receive = working(cards)
 
@@ -14,15 +14,15 @@ class CardDispenser(cards: Seq[Card])(implicit battleContext: BattleContext) ext
     case PullCard =>
       val maybeCard = remainingCards.headOption
       maybeCard.foreach { card =>
-        publish(CardPulled(card))
+        publish(CardPulled(card, player))
         context.become(working(remainingCards.tail))
       }
   }
 }
 
 object CardDispenser {
-  def props(cards: Seq[Card])(implicit battleContext: BattleContext) =
-    Props(new CardDispenser(cards))
+  def props(player: ActorRef, cards: Seq[Card])(implicit battleContext: BattleContext) =
+    Props(new CardDispenser(player, cards))
 
   case object PullCard
 }

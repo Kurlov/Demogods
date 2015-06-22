@@ -26,7 +26,7 @@ with Matchers with BeforeAndAfterAll {
     val dispenserProbe = TestProbe()
     val dispenserMaker = (_: ActorRefFactory) => dispenserProbe.ref
     val battleProbe = TestProbe()
-    val player = TestActorRef[Player](Player.props(battleProbe.ref, dispenserMaker, creatureMaker))
+    val player = TestActorRef[Player](Player.props(battleProbe.ref, creatureMaker))
   }
 
   class PlayerWithCard extends PlayerEnv {
@@ -41,11 +41,6 @@ with Matchers with BeforeAndAfterAll {
       player.underlyingActor.energy.current should be (1)
     }
 
-    "call dispenser for card on new turn" in new PlayerEnv {
-      player ! Player.YourTurn
-      dispenserProbe.expectMsg(CardDispenser.PullCard)
-    }
-
     "increase energy with new turn" in new PlayerEnv {
       player.underlyingActor.energy.current should be (1)
       player ! Player.YourTurn
@@ -55,13 +50,13 @@ with Matchers with BeforeAndAfterAll {
     }
 
     "add pulled card to storage" in new PlayerWithCard {
-      player ! DispenserEvents.CardPulled(card)
+      player ! DispenserEvents.CardPulled(card, player)
       player.underlyingActor.cards should be (List(card))
     }
 
     "spend energy on card activation" in new PlayerWithCard {
       player ! Player.YourTurn
-      player ! DispenserEvents.CardPulled(card)
+      player ! DispenserEvents.CardPulled(card, player)
       val energy = player.underlyingActor.energy.current
       player ! Battle.Commands.ActivateCard(card.id)
       player.underlyingActor.cards should be (List.empty)
@@ -70,7 +65,7 @@ with Matchers with BeforeAndAfterAll {
 
     "restore energy on new turn" in new PlayerWithCard {
       player ! Player.YourTurn
-      player ! DispenserEvents.CardPulled(card)
+      player ! DispenserEvents.CardPulled(card, player)
       player ! Battle.Commands.ActivateCard(card.id)
       player ! Player.YourTurn
       player.underlyingActor.energy.current should be (player.underlyingActor.energy.available)
