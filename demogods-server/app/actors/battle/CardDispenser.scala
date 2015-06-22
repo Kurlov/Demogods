@@ -22,7 +22,7 @@ class CardDispenser(cards: Seq[Card])(implicit battleContext: BattleContext) ext
 
 object CardDispenser {
   def props(cards: Seq[Card])(implicit battleContext: BattleContext) =
-    Props(classOf[CardDispenser],cards)
+    Props(new CardDispenser(cards))
 
   case object PullCard
 }

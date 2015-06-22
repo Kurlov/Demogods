@@ -23,7 +23,7 @@ class CardDispenserSpec(_system: ActorSystem) extends TestKit(_system) with Impl
     implicit val battleContext = BattleContext(battleId)
     val eventBus = new PubSub {}
     val listener = TestProbe()
-    eventBus.subscribe(listener.ref, classOf[HeroEvent])
+    eventBus.subscribe(listener.ref, classOf[DispenserEvent])
     val cards =
       Seq(
         CreatureCard(
