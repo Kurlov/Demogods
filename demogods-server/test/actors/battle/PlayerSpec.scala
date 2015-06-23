@@ -2,7 +2,7 @@ package actors.battle
 
 import java.util.UUID
 
-import akka.actor.{ActorRef, ActorRefFactory, ActorSystem}
+import akka.actor._
 import akka.testkit.{TestActorRef, TestProbe, ImplicitSender, TestKit}
 import models.cards.CreatureCard
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -26,7 +26,14 @@ with Matchers with BeforeAndAfterAll {
     val dispenserProbe = TestProbe()
     val dispenserMaker = (_: ActorRefFactory) => dispenserProbe.ref
     val battleProbe = TestProbe()
-    val player = TestActorRef[Player](Player.props(battleProbe.ref, creatureMaker))
+    val battleId = UUID.randomUUID()
+    trait TestCreatureMakerProvider extends CreatureMakerProvider {
+      this: Actor =>
+      override def creatureMaker: (ActorRefFactory, CreatureCard, UUID) => ActorRef =
+        (_: ActorRefFactory, _: CreatureCard, _: UUID) => creatureProbe.ref
+    }
+    implicit val battleContext = BattleContext(battleId)
+    val player = TestActorRef[Player](Props(new Player(battleProbe.ref) with TestCreatureMakerProvider))
   }
 
   class PlayerWithCard extends PlayerEnv {
