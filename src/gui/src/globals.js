@@ -1,5 +1,5 @@
-var VIEWPORT_W = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-var VIEWPORT_H = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+var VIEWPORT_W = Math.min(document.documentElement.clientWidth, window.innerWidth || 0);
+var VIEWPORT_H = Math.min(document.documentElement.clientHeight, window.innerHeight || 0);
 var TABLE_ZONES = 6; //weirdly big number, actual is 5
 
 var activeElements = []; // necessary for intersection detection; might need to re-implement using bus
