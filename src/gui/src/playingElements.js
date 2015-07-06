@@ -7,15 +7,12 @@ function PlayingElement(id, imageUrl, x, y) {
 	this._x = x;
 	this._y = y;
 		
-	function onDragStop() {
-		this.checkIntersections();
-		this.restorePosition();
-	}
+	
 	
 	this._sprite = game.add.image(this._x, this._y, this._id);
 	this.fitToScreen();
 	this._sprite.events.onDragStart.add(this.savePosition, this);
-	this._sprite.events.onDragStop.add(onDragStop, this);
+	this._sprite.events.onDragStop.add(this.onDragStop, this);
 	//TODO: implement dynamic image load
 	//dynamicImageLoad(this._id, this._imageUrl, this.cardSprite, this._x, this._y, this.cardSprite);
 	//this.cardSprite.loadTexture(this.id);
@@ -23,6 +20,11 @@ function PlayingElement(id, imageUrl, x, y) {
 	this._prevX = null;
 	this._prevY = null;
 	
+}
+PlayingElement.prototype.onDragStop = function() {
+		var intersects = this.checkIntersections();
+		this.restorePosition();
+		return intersects;
 }
 
 // Calculates size of playing element depending on viewport dimensions
@@ -47,7 +49,7 @@ PlayingElement.prototype.attack = function(target) {
 	tween.to( { x: target._x, y: target._y }, 400);
 	
 	tween.onComplete.add(d);
-	tween.start();
+	return tween.start();
 }
 
 PlayingElement.prototype.getBounds = function() {
@@ -67,6 +69,7 @@ PlayingElement.prototype.restorePosition = function() {
 }
 
 PlayingElement.prototype.checkIntersections = function() {
+	var index = -1;
 	for (var i = 0; i < activeElements.length; i++) {
 		if (Phaser.Rectangle.intersects(new Phaser.Rectangle(this._sprite.x + Math.floor(this._sprite.width / 2), 
 															 this._sprite.y + Math.floor(this._sprite.height / 2), 
@@ -74,8 +77,15 @@ PlayingElement.prototype.checkIntersections = function() {
 															 2), 
 										activeElements[i].getBounds()) && 
 		   (this != activeElements[i])) {
-			this.onIntersection(activeElements[i]);
-		}
+				index = i;
+				break;
+			}
+	}
+	if (index != -1) {
+		this.onIntersection(activeElements[index]);
+		return true;
+	} else {
+		return false;
 	}
 }
 
@@ -122,7 +132,7 @@ function Monster(id, imageUrl, x, y) {
 	this._sprite.input.enableDrag();
 
 	
-	var healthStyle = { font: String(Math.floor(this._sprite.height / 5)) + "px Arial", fill: "#ffffff"};;
+	var healthStyle = { font: String(Math.floor(this._sprite.height / 5)) + "px Arial", fill: "#ffffff"};
 	this._health = game.add.text(this._sprite.x, this._sprite.y, '0', healthStyle);
 	activeElements.push(this);
 	

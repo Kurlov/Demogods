@@ -30,26 +30,6 @@ states.play.prototype.create = function() {
 	this.player1 = new Player('player', 'assets/cards/player.png', 0, 0);
 	this.player2 = new Player('player1', 'assets/cards/player1.png', 0, 600);
 	
-	/*player1.setHealth(player1Health);
-	player2.setHealth(player2Health);*/
-	
-	/*player1Deck.addItem('cyan_card', 'assets/cards/cyan.png');
-	player1Deck.addItem('cyan_card', 'assets/cards/cyan.png');
-	player1Deck.addItem('cyan_card', 'assets/cards/cyan.png');
-	
-	player2Deck.addItem('yellow_card', 'assets/cards/yellow.png');
-	player2Deck.addItem('yellow_card', 'assets/cards/yellow.png');
-	player2Deck.addItem('yellow_card', 'assets/cards/yellow.png');
-	
-	playingTable.addItem('monster', 'assets/cards/monster.png');
-	playingTable.addItem('monster', 'assets/cards/monster.png');
-	playingTable.addItem('monster', 'assets/cards/monster.png');*/
-	
-
-	
-	//playingTable._items[0].attack(playingTable._items[1]);
-	//playingTable.deleteItem('monster');
-	
 	this.addItems();
 	this.setHealth();
 }
@@ -100,9 +80,7 @@ states.mainMenu.prototype.goPlay  = function() {
 	game.state.start('play');
 }
 
-function GUI() {
-
-	
+function GUI() {	
 	this.player1Items = [];
 	this.player2Items = [];
 	this.playingTableItems = [];
@@ -113,12 +91,12 @@ function GUI() {
 	this.playingTable = null;
 	this.player1 = null;
 	this.player2 = null;
-
+	
 
 	game = new Phaser.Game(VIEWPORT_W, VIEWPORT_H, Phaser.CANVAS, '');
 	game.state.add('play', new states.play(this));
 	game.state.add('mainMenu', new states.mainMenu());
-	
+	this._tg = game;
 }
 
 GUI.prototype.showMainMenu = function() {
@@ -143,20 +121,26 @@ GUI.prototype.addMonster = function(_id, _imageUrl, _health) {
 
 GUI.prototype.deletePlayer1Card = function(id) {
 	if (game.state.current === 'play') {
-		game.state.getCurrentState().player1Deck.deleteItem(id);
+		return game.state.getCurrentState().player1Deck.deleteItem(id);
+	} else {
+		return false;
 	}
 }
 
 GUI.prototype.deletePlayer2Card = function(id) {
 	if (game.state.current === 'play') {
-		game.state.getCurrentState().player2Deck.deleteItem(id);
+		return game.state.getCurrentState().player2Deck.deleteItem(id);
+	} else {
+		return false;
 	}
 }
 
 GUI.prototype.deleteMonster = function(id) {
 	if (game.state.current === 'play') {
 	console.log("deleting monster");
-		game.state.getCurrentState().playingTable.deleteItem(id);
+		return game.state.getCurrentState().playingTable.deleteItem(id);
+	} else {
+		return false;
 	}
 }
 
