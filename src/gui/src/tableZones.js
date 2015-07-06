@@ -1,5 +1,15 @@
-/*
- * tableZone class. Provides interface for card manipulation on the table zone (player cards, active monsters, etc). Renders zone background.
+/**
+  * @file Contains TableZone class and its children. Responsible for rendering zones background and cards manipulation
+  * @author Petrov Alexander exesa@yandex.ru
+  * @requires playingElements.js
+  * @requires Phaser.js
+  * @requires globals.js
+  */
+
+/**
+ * @class
+ * @classdesc TableZone class. Provides interface for card manipulation on the table zone (player cards, active monsters, etc). Renders zone background.
+ * @arg {string} backgroundImage URL to image, which will be rendered as zone's background
  */
 function TableZone(backgroundImage) {
 	this._id = backgroundImage
@@ -12,6 +22,10 @@ function TableZone(backgroundImage) {
 	
 }
 
+/**
+  * @method TableZone#fitToScreen
+  * @desc Resizes sprite according to user's display size
+  */
 TableZone.prototype.fitToScreen = function () {
 	var originalSpriteHeight = this._sprite.height;
 	this._sprite.height = Math.floor(1.2 * VIEWPORT_H / TABLE_ZONES);
@@ -20,14 +34,25 @@ TableZone.prototype.fitToScreen = function () {
 	this._sprite.width = Math.floor(0.9 * VIEWPORT_W);
 }
 
-//add PlayingElement to TableZone
+/**
+  * @method TableZone#addItem
+  * @desc Adds new {@link PlayingElement} to TableZone
+  * @arg {string} id Unique element id
+  * @arg {string} imageUrl URL of an image, whil will be shown ingame
+  * @returns {PlayingElement} Element being added
+  */
 TableZone.prototype.addItem = function (id, imageUrl) {
 	var item = new PlayingElement(id, imageUrl, this._elementWidth * this._items.length, this._y);
 	this._items.push(item);
 	return item;
 	//activeElements.push(item);
 }
-
+/**
+  *	@method TableZone#deleteItem
+  * @desc Deletes item from the TableZone
+  * @arg {string} id Id of element being deleted
+  * @returns {boolean} Returns true if successful
+  */
 TableZone.prototype.deleteItem = function(id) {
 	var index = -1;
 	for (var i = 0; i < this._items.length; i++) {
@@ -45,9 +70,12 @@ TableZone.prototype.deleteItem = function(id) {
 	}
 }
 
-
-/*
- * PlayerDeck zone class. 
+/**
+ * @class
+ * @classdesc PlayerDeck class. Implements zone responsible for players cards.
+ * @arg {string} backgroundImage URL to image, which will be rendered as zone's background
+ * @arg {boolean} bottom Should it be rendered on bottom of the screen?
+ * @extends TableZone
  */
 function PlayerDeck(backgroundImage, bottom) {
 	TableZone.apply(this, arguments);
@@ -65,6 +93,13 @@ function PlayerDeck(backgroundImage, bottom) {
 PlayerDeck.prototype = Object.create(TableZone.prototype);
 PlayerDeck.prototype.constructor = TableZone;
 
+/**
+  * @method PlayerDeck#addItem
+  * @desc Adds {@link Card} to player's deck
+  * @arg {string} id Unique element id
+  * @arg {string} imageUrl URL of an image, whil will be shown ingame
+  * @returns {Card} Element being added
+  */
 PlayerDeck.prototype.addItem = function (id, imageUrl) {
 	var item = new Card(id, imageUrl, this._elementWidth * this._items.length + this._x, this._y);
 	this._items.push(item);
@@ -72,8 +107,12 @@ PlayerDeck.prototype.addItem = function (id, imageUrl) {
 	//activeElements.push(item);
 }
 
-/*
- * PlayingArea zone class, where monsters spawn
+/**
+ * @class
+ * @classdesc PlayingArea class. Implements zone responsible for center of the screen, where deployed monsters belong.
+ * @arg {string} backgroundImage URL to image, which will be rendered as zone's background
+ * @arg {boolean} bottom Should it be rendered on bottom of the screen?
+ * @extends TableZone
  */
 function PlayingArea(backgroundImage, x, y) {
 	TableZone.apply(this, arguments);
@@ -88,6 +127,13 @@ function PlayingArea(backgroundImage, x, y) {
 PlayingArea.prototype = Object.create(TableZone.prototype);
 PlayingArea.prototype.constructor = TableZone;
 
+/**
+  * @method PlayerDeck#addItem
+  * @desc Adds {@link Monster} to player's deck
+  * @arg {string} id Unique element id
+  * @arg {string} imageUrl URL of an image, whil will be shown ingame
+  * @returns {Monster} Element being added
+  */
 PlayingArea.prototype.addItem = function (id, imageUrl, health) {
 	var item = new Monster(id, imageUrl, this._elementWidth * this._items.length, this._y + 50);
 	item.setHealth(health);
@@ -97,7 +143,10 @@ PlayingArea.prototype.addItem = function (id, imageUrl, health) {
 }
 
 
-
+/**
+  * @method PlayingArea#update
+  * @desc Calls {@link Monster#update} method for existing Monsters. Must be called on global update
+  */
 PlayingArea.prototype.update = function() {
 	for (var i = 0; i < this._items.length; i++) {
 		this._items[i].update();

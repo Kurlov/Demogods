@@ -1,5 +1,21 @@
+/**
+  * @file GUI class, which holds main GUI API, and states object.
+  * @author Petrov Alexander exesa@yandex.ru
+  * @requires playingElements.js
+  * @requires Phaser.js
+  * @requires globals.js
+  * @requires tableZones.js
+  */
+
+
 var states = {};
 
+/**
+  * @class
+  * @classDesc State class, represents playing game state
+  * @arg {GUI} Main GUI object
+  * @implements Phaser.State
+  */
 states.play = function(gui) {
 	this.monster1 = null;
 	this.gui = gui;
@@ -39,7 +55,10 @@ states.play.prototype.update = function() {
 	this.addItems();
 	this.setHealth();
 }
-
+/**
+  * @method play#addItems
+  * @desc Adds items from object pool to actual {@link TableZone}
+  */
 states.play.prototype.addItems = function() {
 	for (var i = 0; i < this.gui.player1Items.length; i++) {
 		var item = this.gui.player1Items.shift();
@@ -54,12 +73,20 @@ states.play.prototype.addItems = function() {
 		this.playingTable.addItem(item.id, item.imageUrl, item.health);
 	}
 }
-
+/**
+  * @method play#setHealth
+  * @desc sets players health from object pool
+  */
 states.play.prototype.setHealth = function() {
 	this.player1.setHealth(this.gui.player1Health);
 	this.player2.setHealth(this.gui.player2Health);
 }
 
+/**
+  * @class
+  * @classDesc State class, represents main menu state
+  * @implements Phaser.State
+  */
 states.mainMenu = function() {
 	this.logo = null;
 	this.button = null;
@@ -76,10 +103,18 @@ states.mainMenu.prototype.create = function() {
 	this.button = game.add.button(VIEWPORT_W / 2 - 48, 500, 'button_out',  this.goPlay, this, 'button_over', 'button_out');
 }
 
+/**
+  * @method mainMenu#goPlay
+  * @desc starts a playing state
+  */
 states.mainMenu.prototype.goPlay  = function() {
 	game.state.start('play');
 }
 
+/**
+  * @class
+  * @classdesc Main GUI class. Use this to create GUI instance and control it
+  */
 function GUI() {	
 	this.player1Items = [];
 	this.player2Items = [];
@@ -99,26 +134,53 @@ function GUI() {
 	this._tg = game;
 }
 
+/**
+  * @method GUI#showMainMenu
+  * @desc Shows main menu
+  */
 GUI.prototype.showMainMenu = function() {
 	game.state.start('mainMenu');
 }
-
+/**
+  * @method GUI#play
+  * @desc Stars playing session
+  */
 GUI.prototype.play = function() {
 	game.state.start('play');
 }
-
+/**
+  * @method GUI#addPlayer1Card
+  * @desc Adds card to the first player's deck
+  * @arg {string} _id Unique id of the {@link Card}
+  * @arg {string} _imageUrl URL to an image, whick will be shown ingame
+  */
 GUI.prototype.addPlayer1Card = function(_id, _imageUrl) {
 	this.player1Items.push({id: _id, imageUrl: _imageUrl});
 }
-
+/**
+  * @method GUI#addPlayer2Card
+  * @desc Adds card to the second player's deck
+  * @arg {string} _id Unique id of the {@link Card}
+  * @arg {string} _imageUrl URL to an image, whick will be shown ingame
+  */
 GUI.prototype.addPlayer2Card = function(_id, _imageUrl) {
 	this.player2Items.push({id: _id, imageUrl: _imageUrl});
 }
-
+/**
+  * @method GUI#addMonster
+  * @desc Adds monster to the playing table
+  * @arg {string} _id Unique id of the {@link Card}
+  * @arg {string} _imageUrl URL to an image, whick will be shown ingame
+  * @arg {number} _health Monster's health
+  */
 GUI.prototype.addMonster = function(_id, _imageUrl, _health) {
 	this.playingTableItems.push({id: _id, imageUrl: _imageUrl, health: _health});
 }
-
+/**
+  * @method GUI#deletePlayer1Card
+  * @desc Deletes card from the first player's deck
+  * @arg id Id of the card being deleted
+  */
 GUI.prototype.deletePlayer1Card = function(id) {
 	if (game.state.current === 'play') {
 		return game.state.getCurrentState().player1Deck.deleteItem(id);
@@ -126,7 +188,11 @@ GUI.prototype.deletePlayer1Card = function(id) {
 		return false;
 	}
 }
-
+/**
+  * @method GUI#deletePlayer2Card
+  * @desc Deletes card from the second player's deck
+  * @arg id Id of the card being deleted
+  */
 GUI.prototype.deletePlayer2Card = function(id) {
 	if (game.state.current === 'play') {
 		return game.state.getCurrentState().player2Deck.deleteItem(id);
@@ -134,7 +200,11 @@ GUI.prototype.deletePlayer2Card = function(id) {
 		return false;
 	}
 }
-
+/**
+  * @method GUI#deleteMonster
+  * @desc Deletes monster from the playing table
+  * @arg id Id of the monster being deleted
+  */
 GUI.prototype.deleteMonster = function(id) {
 	if (game.state.current === 'play') {
 	console.log("deleting monster");
@@ -144,10 +214,20 @@ GUI.prototype.deleteMonster = function(id) {
 	}
 }
 
+/**
+  * @method GUI#setPlayer1Health
+  * @desc Sets the first player's health
+  * @arg {number} health Desired health level
+  */
 GUI.prototype.setPlayer1Health = function(health) {
 	this.player1Health = health;
 }
 
+/**
+  * @method GUI#setPlayer1Health
+  * @desc Sets the second player's health
+  * @arg {number} health Desired health level
+  */
 GUI.prototype.setPlayer2Health = function(health) {
 	this.player2Health = health;
 }

@@ -1,5 +1,19 @@
-/*
- * Playing element class. Ancestor of main playing elements on table, such as cards, player and monsters
+/**
+  * @file Contains Playing element class and its children. Responsible for cards, players and monsters logics and render on the table.
+  * @author Petrov Alexnader exesa@yandex.ru
+  * @requires Phaser.js
+  * @requires globals.js
+  */
+
+
+
+/**
+ * @class 
+ * @classdesc Playing element class. Ancestor of main playing elements on table, such as cards, player and monsters
+ * @arg {string} id Unique element's id
+ * @arg {string} imageUrl Link to a image which will be shown ingame
+ * @arg {number} x Coordinate on x-axis
+ * @arg {number} y Coordinate on y-axis
  */
 function PlayingElement(id, imageUrl, x, y) {
 	this._id = id;
@@ -21,13 +35,19 @@ function PlayingElement(id, imageUrl, x, y) {
 	this._prevY = null;
 	
 }
+/** @method PlayingElement#onDragStop 
+  * @desc DragnDrop stop event handler
+  * @returns {@link PlayingElement#checkIntersections} result
+  */
 PlayingElement.prototype.onDragStop = function() {
 		var intersects = this.checkIntersections();
 		this.restorePosition();
 		return intersects;
 }
 
-// Calculates size of playing element depending on viewport dimensions
+/** @method PlayingElement#fitToScreen 
+  * @desc Resizes sprite according to user's display size
+  */
 PlayingElement.prototype.fitToScreen = function() {
 	var originalSpriteHeight = this._sprite.height;
 	this._sprite.height = Math.floor(VIEWPORT_H / TABLE_ZONES);
@@ -36,10 +56,18 @@ PlayingElement.prototype.fitToScreen = function() {
 	
 }
 
+/** @method PlayingElement#destroy 
+  * @desc destroys object
+  */
 PlayingElement.prototype.destroy = function() {
 	this._sprite.destroy();
 }
 
+/** @method PlayingElement#attack
+  * @desc Plays attack animation
+  * @arg {PlayingElement} target Object being attacked
+  * @returns {Phaser.Tween} Tween being played
+  */
 PlayingElement.prototype.attack = function(target) {
 	var energyBall = game.add.image(this._sprite.x, this._sprite.y, 'energy_ball');
 	var tween = game.add.tween(energyBall);
@@ -52,15 +80,27 @@ PlayingElement.prototype.attack = function(target) {
 	return tween.start();
 }
 
+/** @method PlayingElement#getBounds
+  * @desc Returns rectangle, occupied by element
+  * @returns {Phaser.Rectangle}
+  */
 PlayingElement.prototype.getBounds = function() {
 	return this._sprite.getBounds();
 }
 
+/**
+  * @method PlayingElement#savePosition
+  * @desc Saves current element posistion
+  */
 PlayingElement.prototype.savePosition = function() {
 	this._prevX = this._sprite.x;
 	this._prevY = this._sprite.y;
 }
 
+/**
+  * @method PlayingElement#restorePosition
+  * @desc restores position, previously saved by {@link PlayingElement#savePosition}
+  */
 PlayingElement.prototype.restorePosition = function() {
 	if ((this._prevX != null) && (this._prevY != null)) {
 		this._sprite.x = this._prevX;
@@ -68,6 +108,11 @@ PlayingElement.prototype.restorePosition = function() {
 	}
 }
 
+/**
+  * @method PlayingElement#checkIntersections
+  * @desc checks if current element intersects any other in game. Returns true and calls PlayingElement#onIntersection if so
+  * @returns {Boolean}
+  */
 PlayingElement.prototype.checkIntersections = function() {
 	var index = -1;
 	for (var i = 0; i < activeElements.length; i++) {
@@ -89,13 +134,24 @@ PlayingElement.prototype.checkIntersections = function() {
 	}
 }
 
+/**
+  * @method PlayingElement#onIntersection 
+  * @desc Intersection event handler
+  * @arg {PlayingElement} target Object being attacked
+  */
 PlayingElement.prototype.onIntersection = function(target) {
 	this.restorePosition();
 	this.attack(target);
 }
 
-/*
- * Card class. Represents player's cards on playing table.
+/**
+ * @class 
+ * @classdesc Card class. Represents player's cards on playing table.
+ * @arg {string} id Unique element's id
+ * @arg {string} imageUrl Link to a image which will be shown ingame
+ * @arg {number} x Coordinate on x-axis
+ * @arg {number} y Coordinate on y-axis
+ * @extends PlayingElement
  */ 
 function Card(id, imageUrl, x, y) {
 	PlayingElement.apply(this, arguments);
@@ -123,9 +179,16 @@ Card.prototype.destroy = function() {
 	this._sprite.destroy();
 }
 
-/*
- * Monster class. Represents monsters spawned on playing table.
- */ 
+
+ /**
+ * @class 
+ * @classdesc Monster class. Represents monsters spawned on playing table.
+ * @arg {string} id Unique element's id
+ * @arg {string} imageUrl Link to a image which will be shown ingame
+ * @arg {number} x Coordinate on x-axis
+ * @arg {number} y Coordinate on y-axis
+ * @extends PlayingElement
+ */
 function Monster(id, imageUrl, x, y) {
 	PlayingElement.apply(this, arguments);
 	this._sprite.inputEnabled = true;
@@ -141,6 +204,11 @@ function Monster(id, imageUrl, x, y) {
 Monster.prototype = Object.create(PlayingElement.prototype);
 Monster.prototype.constructor = PlayingElement;
 
+/**
+  * @method Monster#setHealth
+  * @desc Sets health level of this Monster.
+  * @arg {number} Health level
+  */
 Monster.prototype.setHealth = function(health) {
 	this._health.text = health;
 }
@@ -163,15 +231,24 @@ Monster.prototype.destroy = function() {
 	this._health.destroy();
 }
 
-//Redraws monster on call. Must be called on global update.
+/**
+  * @method Mosnter#update
+  * @desc Redraws monster on call. Must be called on global update.
+  */
 Monster.prototype.update = function() {
 	this._health.x = this._sprite.x;
 	this._health.y = this._sprite.y;
 }
 
-/*
- * Player class. Represents player's icon with stats.
- */ 
+/**
+ * @class 
+ * @classdesc Player class. Represents players icon and health level
+ * @arg {string} id Unique element's id
+ * @arg {string} imageUrl Link to a image which will be shown ingame
+ * @arg {number} x Coordinate on x-axis
+ * @arg {number} y Coordinate on y-axis
+ * @extends PlayingElement
+ */
 function Player(id, imageUrl, x, y) {
 	PlayingElement.apply(this, arguments);
 	this._sprite.inputEnabled = true;
@@ -183,6 +260,11 @@ function Player(id, imageUrl, x, y) {
 Player.prototype = Object.create(PlayingElement.prototype);
 Player.prototype.constructor = PlayingElement;
 
+/**
+  * @method Player#setHealth
+  * @desc Sets health level of this Monster.
+  * @arg {number} Health level
+  */
 Player.prototype.setHealth = function(health) {
 	this._health.text = health;
 }
