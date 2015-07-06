@@ -24,7 +24,7 @@ TableZone.prototype.fitToScreen = function () {
 TableZone.prototype.addItem = function (id, imageUrl) {
 	var item = new PlayingElement(id, imageUrl, this._elementWidth * this._items.length, this._y);
 	this._items.push(item);
-	activeElements.push(item);
+	//activeElements.push(item);
 }
 
 TableZone.prototype.deleteItem = function(id) {
@@ -38,18 +38,6 @@ TableZone.prototype.deleteItem = function(id) {
 	this._items[index].destroy();
 	if (index != -1) {
 		this._items.splice(index, 1);
-	}
-	
-	var gindex = -1;
-	for (var i = 0; i < activeElements.length; i++) {
-		if (activeElements[i]._id === id) {
-			gindex = i;
-			break;
-		}
-	}
-	activeElements[gindex].destroy();
-	if (gindex != -1) {
-		activeElements.splice(gindex, 1);
 	}
 }
 
@@ -76,7 +64,7 @@ PlayerDeck.prototype.constructor = TableZone;
 PlayerDeck.prototype.addItem = function (id, imageUrl) {
 	var item = new Card(id, imageUrl, this._elementWidth * this._items.length + this._x, this._y);
 	this._items.push(item);
-	activeElements.push(item);
+	//activeElements.push(item);
 }
 
 /*
@@ -99,7 +87,7 @@ PlayingArea.prototype.addItem = function (id, imageUrl, health) {
 	var item = new Monster(id, imageUrl, this._elementWidth * this._items.length, this._y + 50);
 	item.setHealth(health);
 	this._items.push(item);
-	activeElements.push(item);
+	//activeElements.push(item);
 }
 
 

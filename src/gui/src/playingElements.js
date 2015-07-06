@@ -91,13 +91,25 @@ function Card(id, imageUrl, x, y) {
 	PlayingElement.apply(this, arguments);
 	this._sprite.inputEnabled = true;
 	this._sprite.input.enableDrag();
-	
+	activeElements.push(this);
 }
 
 Card.prototype = Object.create(PlayingElement.prototype);
 Card.prototype.constructor = PlayingElement;
 
 Card.prototype.destroy = function() {
+	var gindex = -1;
+	for (var i = 0; i < activeElements.length; i++) {
+		if (activeElements[i]._id === this._id) {
+			gindex = i;
+			break;
+		}
+	}
+	//activeElements[gindex].destroy();
+	if (gindex != -1) {
+		activeElements.splice(gindex, 1);
+	}
+	
 	this._sprite.destroy();
 }
 
@@ -112,7 +124,7 @@ function Monster(id, imageUrl, x, y) {
 	
 	var healthStyle = { font: String(Math.floor(this._sprite.height / 5)) + "px Arial", fill: "#ffffff"};;
 	this._health = game.add.text(this._sprite.x, this._sprite.y, '0', healthStyle);
-	
+	activeElements.push(this);
 	
 }
 
@@ -124,6 +136,18 @@ Monster.prototype.setHealth = function(health) {
 }
 
 Monster.prototype.destroy = function() {
+	var gindex = -1;
+	for (var i = 0; i < activeElements.length; i++) {
+		if (activeElements[i]._id === this._id) {
+			gindex = i;
+			break;
+		}
+	}
+	//activeElements[gindex].destroy();
+	if (gindex != -1) {
+		activeElements.splice(gindex, 1);
+	}
+
 	this._sprite.destroy();
 	this._health.text= '';
 	this._health.destroy();
