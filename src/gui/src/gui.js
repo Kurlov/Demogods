@@ -2,7 +2,7 @@
   * @file GUI class, which holds main GUI API, and states object.
   * @author Petrov Alexander exesa@yandex.ru
   * @requires playingElements.js
-  * @requires Phaser.js
+  * @requires phaser.min.js
   * @requires globals.js
   * @requires tableZones.js
   */
@@ -22,7 +22,7 @@ states.play = function(gui) {
 	this.player1 = null;
 	this.player2 = null;
 	this.playingTable = null;
-}
+};
 
 states.play.prototype.preload = function() {
 	//dynamic
@@ -36,7 +36,8 @@ states.play.prototype.preload = function() {
 	this.load.image('player_deck1', 'assets/cards/playerDeck.png');
 	this.load.image('playing_table', 'assets/cards/playingTable.png');
 	this.load.image('energy_ball', 'assets/cards/energy_ball.png');
-}
+	this.game.add.plugin(Phaser.Plugin.Debug);
+};
 
 states.play.prototype.create = function() {
 	this.player1Deck = new PlayerDeck('player_deck', false);
@@ -48,13 +49,13 @@ states.play.prototype.create = function() {
 	
 	this.addItems();
 	this.setHealth();
-}
+};
 
 states.play.prototype.update = function() {
 	this.playingTable.update();
 	this.addItems();
 	this.setHealth();
-}
+};
 /**
   * @method play#addItems
   * @desc Adds items from object pool to actual {@link TableZone}
@@ -64,15 +65,15 @@ states.play.prototype.addItems = function() {
 		var item = this.gui.player1Items.shift();
 		this.player1Deck.addItem(item.id, item.imageUrl);
 	}
-	for (var i = 0; i < this.gui.player2Items.length; i++) {
-		var item = this.gui.player2Items.shift();
+	for (i = 0; i < this.gui.player2Items.length; i++) {
+		item = this.gui.player2Items.shift();
 		this.player2Deck.addItem(item.id, item.imageUrl);
 	}
-	for (var i = 0; i < this.gui.playingTableItems.length; i++) {
-		var item = this.gui.playingTableItems.shift();
+	for (i = 0; i < this.gui.playingTableItems.length; i++) {
+		item = this.gui.playingTableItems.shift();
 		this.playingTable.addItem(item.id, item.imageUrl, item.health);
 	}
-}
+};
 /**
   * @method play#setHealth
   * @desc sets players health from object pool
@@ -80,7 +81,7 @@ states.play.prototype.addItems = function() {
 states.play.prototype.setHealth = function() {
 	this.player1.setHealth(this.gui.player1Health);
 	this.player2.setHealth(this.gui.player2Health);
-}
+};
 
 /**
   * @class
@@ -90,18 +91,18 @@ states.play.prototype.setHealth = function() {
 states.mainMenu = function() {
 	this.logo = null;
 	this.button = null;
-}
+};
 
 states.mainMenu.prototype.preload = function() {
 	this.load.image('logo', 'assets/cards/logo.png');
 	this.load.image('button_out', 'assets/cards/button_out.png');
 	this.load.image('button_over', 'assets/cards/button_over.png');
-}
+};
 
 states.mainMenu.prototype.create = function() {
 	this.logo = game.add.image(VIEWPORT_W / 2 - 400, 100, 'logo');
 	this.button = game.add.button(VIEWPORT_W / 2 - 48, 500, 'button_out',  this.goPlay, this, 'button_over', 'button_out');
-}
+};
 
 /**
   * @method mainMenu#goPlay
@@ -109,7 +110,7 @@ states.mainMenu.prototype.create = function() {
   */
 states.mainMenu.prototype.goPlay  = function() {
 	game.state.start('play');
-}
+};
 
 /**
   * @class
@@ -128,7 +129,7 @@ function GUI() {
 	this.player2 = null;
 	
 
-	game = new Phaser.Game(VIEWPORT_W, VIEWPORT_H, Phaser.CANVAS, '');
+	game = new Phaser.Game(VIEWPORT_W, VIEWPORT_H, Phaser.WEBGL, '');
 	game.state.add('play', new states.play(this));
 	game.state.add('mainMenu', new states.mainMenu());
 	this._tg = game;
@@ -140,14 +141,14 @@ function GUI() {
   */
 GUI.prototype.showMainMenu = function() {
 	game.state.start('mainMenu');
-}
+};
 /**
   * @method GUI#play
   * @desc Stars playing session
   */
 GUI.prototype.play = function() {
 	game.state.start('play');
-}
+};
 /**
   * @method GUI#addPlayer1Card
   * @desc Adds card to the first player's deck
@@ -156,7 +157,7 @@ GUI.prototype.play = function() {
   */
 GUI.prototype.addPlayer1Card = function(_id, _imageUrl) {
 	this.player1Items.push({id: _id, imageUrl: _imageUrl});
-}
+};
 /**
   * @method GUI#addPlayer2Card
   * @desc Adds card to the second player's deck
@@ -165,7 +166,7 @@ GUI.prototype.addPlayer1Card = function(_id, _imageUrl) {
   */
 GUI.prototype.addPlayer2Card = function(_id, _imageUrl) {
 	this.player2Items.push({id: _id, imageUrl: _imageUrl});
-}
+};
 /**
   * @method GUI#addMonster
   * @desc Adds monster to the playing table
@@ -175,7 +176,7 @@ GUI.prototype.addPlayer2Card = function(_id, _imageUrl) {
   */
 GUI.prototype.addMonster = function(_id, _imageUrl, _health) {
 	this.playingTableItems.push({id: _id, imageUrl: _imageUrl, health: _health});
-}
+};
 /**
   * @method GUI#deletePlayer1Card
   * @desc Deletes card from the first player's deck
@@ -187,7 +188,7 @@ GUI.prototype.deletePlayer1Card = function(id) {
 	} else {
 		return false;
 	}
-}
+};
 /**
   * @method GUI#deletePlayer2Card
   * @desc Deletes card from the second player's deck
@@ -199,7 +200,7 @@ GUI.prototype.deletePlayer2Card = function(id) {
 	} else {
 		return false;
 	}
-}
+};
 /**
   * @method GUI#deleteMonster
   * @desc Deletes monster from the playing table
@@ -212,7 +213,7 @@ GUI.prototype.deleteMonster = function(id) {
 	} else {
 		return false;
 	}
-}
+};
 
 /**
   * @method GUI#setPlayer1Health
@@ -221,7 +222,7 @@ GUI.prototype.deleteMonster = function(id) {
   */
 GUI.prototype.setPlayer1Health = function(health) {
 	this.player1Health = health;
-}
+};
 
 /**
   * @method GUI#setPlayer1Health
@@ -230,5 +231,5 @@ GUI.prototype.setPlayer1Health = function(health) {
   */
 GUI.prototype.setPlayer2Health = function(health) {
 	this.player2Health = health;
-}
+};
 

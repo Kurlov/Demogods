@@ -24,6 +24,7 @@ function PlayingElement(id, imageUrl, x, y) {
 	
 	
 	this._sprite = game.add.image(this._x, this._y, this._id);
+	//this._sprite.blendMode = PIXI.blendModes.ADD;
 	this.fitToScreen();
 	this._sprite.events.onDragStart.add(this.savePosition, this);
 	this._sprite.events.onDragStop.add(this.onDragStop, this);
@@ -43,7 +44,7 @@ PlayingElement.prototype.onDragStop = function() {
 		var intersects = this.checkIntersections();
 		this.restorePosition();
 		return intersects;
-}
+};
 
 /** @method PlayingElement#fitToScreen 
   * @desc Resizes sprite according to user's display size
@@ -54,14 +55,14 @@ PlayingElement.prototype.fitToScreen = function() {
 	//console.log(this._sprite.height);
 	this._sprite.width = Math.floor(this._sprite.width / (originalSpriteHeight / this._sprite.height));
 	
-}
+};
 
 /** @method PlayingElement#destroy 
   * @desc destroys object
   */
 PlayingElement.prototype.destroy = function() {
 	this._sprite.destroy();
-}
+};
 
 /** @method PlayingElement#attack
   * @desc Plays attack animation
@@ -78,7 +79,7 @@ PlayingElement.prototype.attack = function(target) {
 	
 	tween.onComplete.add(d);
 	return tween.start();
-}
+};
 
 /** @method PlayingElement#getBounds
   * @desc Returns rectangle, occupied by element
@@ -86,7 +87,7 @@ PlayingElement.prototype.attack = function(target) {
   */
 PlayingElement.prototype.getBounds = function() {
 	return this._sprite.getBounds();
-}
+};
 
 /**
   * @method PlayingElement#savePosition
@@ -95,7 +96,7 @@ PlayingElement.prototype.getBounds = function() {
 PlayingElement.prototype.savePosition = function() {
 	this._prevX = this._sprite.x;
 	this._prevY = this._sprite.y;
-}
+};
 
 /**
   * @method PlayingElement#restorePosition
@@ -106,7 +107,7 @@ PlayingElement.prototype.restorePosition = function() {
 		this._sprite.x = this._prevX;
 		this._sprite.y = this._prevY;
 	}
-}
+};
 
 /**
   * @method PlayingElement#checkIntersections
@@ -132,7 +133,7 @@ PlayingElement.prototype.checkIntersections = function() {
 	} else {
 		return false;
 	}
-}
+};
 
 /**
   * @method PlayingElement#onIntersection 
@@ -142,7 +143,7 @@ PlayingElement.prototype.checkIntersections = function() {
 PlayingElement.prototype.onIntersection = function(target) {
 	this.restorePosition();
 	this.attack(target);
-}
+};
 
 /**
  * @class 
@@ -177,7 +178,7 @@ Card.prototype.destroy = function() {
 	}
 	
 	this._sprite.destroy();
-}
+};
 
 
  /**
@@ -211,7 +212,7 @@ Monster.prototype.constructor = PlayingElement;
   */
 Monster.prototype.setHealth = function(health) {
 	this._health.text = health;
-}
+};
 
 Monster.prototype.destroy = function() {
 	var gindex = -1;
@@ -229,7 +230,7 @@ Monster.prototype.destroy = function() {
 	this._sprite.destroy();
 	this._health.text= '';
 	this._health.destroy();
-}
+};
 
 /**
   * @method Mosnter#update
@@ -238,7 +239,7 @@ Monster.prototype.destroy = function() {
 Monster.prototype.update = function() {
 	this._health.x = this._sprite.x;
 	this._health.y = this._sprite.y;
-}
+};
 
 /**
  * @class 
@@ -267,13 +268,13 @@ Player.prototype.constructor = PlayingElement;
   */
 Player.prototype.setHealth = function(health) {
 	this._health.text = health;
-}
+};
 
 Player.prototype.destroy = function() {
 	this._sprite.destroy();
 	this._health.text = '';
 	this._health.destroy();
-}
+};
 
 
 

@@ -12,7 +12,7 @@
  * @arg {string} backgroundImage URL to image, which will be rendered as zone's background
  */
 function TableZone(backgroundImage) {
-	this._id = backgroundImage
+	this._id = backgroundImage;
 	this._x = 0.9 * VIEWPORT_W;
 	this._sprite = game.add.image(-100, -100, this._id);
 	this.fitToScreen();
@@ -32,7 +32,7 @@ TableZone.prototype.fitToScreen = function () {
 	//console.log(this._sprite.height);
 	//this._sprite.width = Math.floor(this._sprite.width / (originalSpriteHeight / this._sprite.height));
 	this._sprite.width = Math.floor(0.9 * VIEWPORT_W);
-}
+};
 
 /**
   * @method TableZone#addItem
@@ -46,7 +46,7 @@ TableZone.prototype.addItem = function (id, imageUrl) {
 	this._items.push(item);
 	return item;
 	//activeElements.push(item);
-}
+};
 /**
   *	@method TableZone#deleteItem
   * @desc Deletes item from the TableZone
@@ -68,7 +68,7 @@ TableZone.prototype.deleteItem = function(id) {
 	} else {
 		return false;
 	}
-}
+};
 
 /**
  * @class
@@ -105,7 +105,7 @@ PlayerDeck.prototype.addItem = function (id, imageUrl) {
 	this._items.push(item);
 	return item;
 	//activeElements.push(item);
-}
+};
 
 /**
  * @class
@@ -140,7 +140,7 @@ PlayingArea.prototype.addItem = function (id, imageUrl, health) {
 	this._items.push(item);
 	return item;
 	//activeElements.push(item);
-}
+};
 
 
 /**
@@ -151,5 +151,5 @@ PlayingArea.prototype.update = function() {
 	for (var i = 0; i < this._items.length; i++) {
 		this._items[i].update();
 	}
-}
+};
 
