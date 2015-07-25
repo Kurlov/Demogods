@@ -54,13 +54,7 @@ TableZone.prototype.addItem = function (id, imageUrl) {
   * @returns {boolean} Returns true if successful
   */
 TableZone.prototype.deleteItem = function(id) {
-	var index = -1;
-	for (var i = 0; i < this._items.length; i++) {
-		if (this._items[i]._id === id) {
-			index = i;
-			break;
-		}
-	}
+	var index = this.getItemIndex(id);
 	this._items[index].destroy();
 	if (index != -1) {
 		this._items.splice(index, 1);
@@ -68,6 +62,37 @@ TableZone.prototype.deleteItem = function(id) {
 	} else {
 		return false;
 	}
+};
+
+/**
+ * @method TableZone#getItemIndex
+ * @desc Finds index of item by it's id in items array
+ * @arg {string} id Id of element
+ * @returns {number} Returns index of item, -1 otherwise
+ */
+TableZone.prototype.getItemIndex = function (id) {
+    var index = -1;
+    for (var i = 0; i < this._items.length; i++) {
+        if (this._items[i]._id === id) {
+            index = i;
+            break;
+        }
+    }
+    return index;
+};
+/**
+ * @method TableZone#moveToPosition
+ * @desc moves an item to a new position
+ * @param {string} id Id of item being moved
+ * @param {number} position New position of element
+ */
+TableZone.prototype.moveToPosition = function(id, position) {
+    var index = this.getItemIndex(id);
+    if ((index != position) && (position < this._items.length)) {
+        item = this._items[index];
+        this._items.splice(index, 1);
+        this._items.splice(position, 0, item);
+    }
 };
 
 /**
