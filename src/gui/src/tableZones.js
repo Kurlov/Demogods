@@ -81,6 +81,19 @@ TableZone.prototype.getItemIndex = function (id) {
     return index;
 };
 /**
+ * @method TableZone#getItem
+ * @desc Finds item by it's id in items array
+ * @arg {string} id Id of element
+ * @returns {number} Returns  item object, none otherwise
+ */
+TableZone.prototype.getItem = function (id) {
+    var index = this.getItemIndex(id);
+    if (index != -1) {
+        return this._items[index];
+    }
+};
+
+/**
  * @method TableZone#moveToPosition
  * @desc moves an item to a new position
  * @param {string} id Id of item being moved

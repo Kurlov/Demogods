@@ -267,3 +267,40 @@ GUI.prototype.moveMonster = function(id, position) {
 
     }
 };
+
+GUI.prototype.attack = function(attacker, target) {
+    if (game.state.current === 'play') {
+        var from1 = game.state.getCurrentState().player1Deck.getItem(attacker);
+        var from2 = game.state.getCurrentState().player2Deck.getItem(attacker);
+        var from3 = game.state.getCurrentState().playingTable.getItem(attacker);
+        var to1 = game.state.getCurrentState().player1Deck.getItem(target);
+        var to2 = game.state.getCurrentState().player2Deck.getItem(target);
+        var to3 = game.state.getCurrentState().playingTable.getItem(target);
+
+        var from;
+        var to;
+
+        if (from1 != undefined) {
+            from = from1;
+        }
+        if (from2 != undefined) {
+            from = from2;
+        }
+        if (from3 != undefined) {
+            from = from3;
+        }
+        if (to1 != undefined) {
+            to = to1;
+        }
+        if (to2 != undefined) {
+            to = to2;
+        }
+        if (to3 != undefined) {
+            to = to3;
+        }
+
+        if ((from != undefined) && (to != undefined)) {
+            return from.attack(to);
+        }
+    }
+};

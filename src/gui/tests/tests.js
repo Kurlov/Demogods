@@ -103,6 +103,14 @@ QUnit.test("TableZone.getItemIndex()", function(assert) {
     assert.ok(zone.getItemIndex("T2") == 1);
 });
 
+QUnit.test("TableZone.getItem()", function(assert) {
+    var zone = new TableZone('test.png');
+    zone.addItem('GI1', 'test.png');
+    zone.addItem('GI2', 'test.png');
+    assert.ok(zone.getItem("GI1") instanceof PlayingElement);
+});
+
+
 QUnit.test("TableZone.moveToPosition()", function(assert) {
     var zone = new TableZone('test.png');
     zone.addItem('TZ1', 'test.png');
@@ -180,6 +188,12 @@ QUnit.test("addMonster()", function( assert ) {
     gui.addMonster('api3', 'api3.png', 50);
     assert.ok(gui.playingTableItems.length - numOfItems == 1);
 });
+//QUnit.test("attack()", function(assert) {
+//    gui.play();
+//    gui.addPlayer1Card('a1', 'a1.png');
+//    gui.addPlayer1Card('a2', 'a2.png');
+//    assert.ok(gui.attack('a1', 'a2') instanceof Phaser.Tween);
+//});
 
 
 
