@@ -20,24 +20,25 @@ function PlayingElement(id, imageUrl, x, y) {
     this._imageUrl = imageUrl;
     this._x = x;
     this._y = y;
-        
-    
-    
     this._sprite = game.add.image(this._x, this._y, this._id);
-    //this._sprite.blendMode = PIXI.blendModes.ADD;
-    this.fitToScreen();
+    dynamicImageLoad(this._id, this._imageUrl, this);
+    this._sprite.anchor = new Phaser.Point(0.5, 0.5);
+
     this._sprite.events.onDragStart.add(this.savePosition, this);
     this._sprite.events.onDragStop.add(this.onDragStop, this);
     this._sprite.events.onInputOver.add(this.onHover, this);
     this._sprite.events.onInputOut.add(this.onHoverOut, this);
     //TODO: implement dynamic image load
-    //dynamicImageLoad(this._id, this._imageUrl, this.cardSprite, this._x, this._y, this.cardSprite);
-    //this.cardSprite.loadTexture(this.id);
+    //this.fitToScreen();
     
     this._prevX = null;
     this._prevY = null;
     
 }
+PlayingElement.prototype.loadSprite = function() {
+    this._sprite.loadTexture(this._id);
+};
+
 /** @method PlayingElement#onDragStop 
   * @desc DragnDrop stop event handler
   * @returns {@link PlayingElement#checkIntersections} result
@@ -88,12 +89,28 @@ PlayingElement.prototype.destroy = function() {
   */
 PlayingElement.prototype.attack = function(target) {
     var energyBall = game.add.image(this._sprite.x, this._sprite.y, 'energy_ball');
+    energyBall.anchor = new Phaser.Point(0.5, 0.5);
     var tween = game.add.tween(energyBall);
     function d() {
         energyBall.destroy();
     }
     tween.to( { x: target._x, y: target._y }, 400);
     
+    tween.onComplete.add(d);
+    return tween.start();
+};
+
+PlayingElement.prototype.attack2 = function(target) {
+    var lightning = game.add.rope(0, 0, 'lightning', null, [new Phaser.Point(this._x, this._y), new Phaser.Point(target._x, target._y)]);
+    lightning.animations.add("ligntning", null, 60, true);
+    lightning.animations.play("lightning");
+    lightning.play("lightning");
+    var tween = game.add.tween(lightning);
+    function d() {
+        lightning.destroy();
+    }
+    tween.to( {x: 0, y: 0 }, 400);
+
     tween.onComplete.add(d);
     return tween.start();
 };
@@ -134,10 +151,7 @@ PlayingElement.prototype.restorePosition = function() {
 PlayingElement.prototype.checkIntersections = function() {
     var index = -1;
     for (var i = 0; i < activeElements.length; i++) {
-        if (Phaser.Rectangle.intersects(new Phaser.Rectangle(this._sprite.x + Math.floor(this._sprite.width / 2), 
-                                                             this._sprite.y + Math.floor(this._sprite.height / 2), 
-                                                             2, 
-                                                             2), 
+        if (Phaser.Rectangle.intersects(new Phaser.Rectangle(this._sprite.x, this._sprite.y, 2, 2),
                                         activeElements[i].getBounds()) && 
            (this != activeElements[i])) {
                 index = i;

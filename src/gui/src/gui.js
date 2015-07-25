@@ -26,8 +26,8 @@ states.play = function(gui) {
 
 states.play.prototype.preload = function() {
     //dynamic
-    this.load.image('cyan_card', 'assets/cards/cyan.png');
-    this.load.image('yellow_card', 'assets/cards/yellow.png');
+    //this.load.image('cyan_card', 'assets/cards/cyan.png');
+    //this.load.image('yellow_card', 'assets/cards/yellow.png');
     //static
     this.load.image('player', 'assets/cards/player.png');
     this.load.image('player1', 'assets/cards/player1.png');
@@ -36,6 +36,7 @@ states.play.prototype.preload = function() {
     this.load.image('player_deck1', 'assets/cards/playerDeck.png');
     this.load.image('playing_table', 'assets/cards/playingTable.png');
     this.load.image('energy_ball', 'assets/cards/energy_ball.png');
+    this.load.spritesheet('lightning', 'assets/cards/lightning.png', 512, 64);
     this.game.add.plugin(Phaser.Plugin.Debug);
 };
 
@@ -44,8 +45,8 @@ states.play.prototype.create = function() {
     this.player2Deck = new PlayerDeck('player_deck1', true);
     this.playingTable = new PlayingArea('playing_table', 0, 300);
     
-    this.player1 = new Player('player', 'assets/cards/player.png', 0, 0);
-    this.player2 = new Player('player1', 'assets/cards/player1.png', 0, 600);
+    this.player1 = new Player('player', 'assets/cards/player.png', 75, 75);
+    this.player2 = new Player('player1', 'assets/cards/player1.png', 75, 675);
     
     this.addItems();
     this.setHealth();
