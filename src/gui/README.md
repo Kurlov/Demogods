@@ -16,6 +16,10 @@
 * `deletePlayer1Card(id)` - deletes card from first players' deck, specified by **id**;  returns `true` if successful;
 * `deletePlayer2Card(id)` - same for the second player;  
 * `deleteMonster(id)` - same for playing table;  
+* `attack(attacker, target)` - Manually trigger attack action. **attacker** and **target** are unique id's of items.
+* `moveMonster(id, position)` - Move monster to a new position an a table. **id** is unique id, **position** is new position of Monster.
+* `movePlayer1Card(id, position)` - same for player 1 cards.
+* `movePlayer2Card(id, position)` - same for player 2 cards.
   
 Example can be seen in **main.js** file;
 API is obviously not complete, so place your feature request right on scrum table in "ToDo" section.  

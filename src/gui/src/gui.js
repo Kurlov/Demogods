@@ -235,6 +235,7 @@ GUI.prototype.setPlayer2Health = function(health) {
 
 /**
  * @method GUI#movePlayer1Card
+ * @desc Moves card to another position
  * @param {string} id Id of item being moved
  * @param {number} position New position of item
  */
@@ -245,7 +246,8 @@ GUI.prototype.movePlayer1Card = function(id, position) {
 };
 
 /**
- * @method GUI#movePlayer1Card
+ * @method GUI#movePlayer2Card
+ * @desc Moves card to another position
  * @param {string} id Id of item being moved
  * @param {number} position New position of item
  */
@@ -257,7 +259,8 @@ GUI.prototype.movePlayer2Card = function(id, position){
 };
 
 /**
- * @method GUI#movePlayer1Card
+ * @method GUI#moveMonster
+ * @desc Move monster to another position
  * @param {string} id Id of item being moved
  * @param {number} position New position of item
  */
@@ -267,7 +270,13 @@ GUI.prototype.moveMonster = function(id, position) {
 
     }
 };
-
+/**
+ * @method GUI#attack
+ * @desc Manually trigger attack action
+ * @param {string} attacker Id of attacker object
+ * @param {string} target Id of target object
+ * @returns {Phaser.Tween}
+ */
 GUI.prototype.attack = function(attacker, target) {
     if (game.state.current === 'play') {
         var from1 = game.state.getCurrentState().player1Deck.getItem(attacker);
