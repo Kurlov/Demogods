@@ -129,7 +129,7 @@ function GUI() {
     this.player2 = null;
     
 
-    game = new Phaser.Game(VIEWPORT_W, VIEWPORT_H, Phaser.WEBGL, '');
+    game = new Phaser.Game(VIEWPORT_W, VIEWPORT_H, Phaser.CANVAS, '');
     game.state.add('play', new states.play(this));
     game.state.add('mainMenu', new states.mainMenu());
     this._tg = game;
