@@ -5,15 +5,16 @@ import play.api.libs.json._
 trait PlayJsonSocketHelper extends JsonSocketHelper {
   import SocketProtocol._
 
-  private implicit val ThrowCardFormat = Json.format[ThrowCard]
-  private implicit val GameFoundFormat = Json.format[GameFound]
-  private implicit val ApplyCreatureFormat = Json.format[ApplyCreature]
+  private implicit val ActivateCardFormat = Json.format[ActivateCard]
+  private implicit val BattleFoundFormat = Json.format[BattleFound]
+  private implicit val ApplyCreatureFormat = Json.format[AttackCreature]
   private implicit val FirstPlayerSelectedFormat = Json.format[FirstPlayerSelected]
   private implicit val CardPulledFormat = Json.format[CardPulled]
-  private implicit val EnemyCardThrownFormat = Json.format[EnemyCardThrown]
+  private implicit val EnemyCardActivatedFormat = Json.format[EnemyCardActivated]
   private implicit val EnemyCreatureAppliedFormat = Json.format[EnemyCreatureApplied]
   private implicit val CreatureRaisedFormat = Json.format[CreatureRaised]
   private implicit val EnemyCreatureRaisedFormat = Json.format[EnemyCreatureRaised]
+  private implicit val AttackHeroByCreatureFormat = Json.format[AttackHeroByCreature]
 
   private def readDataToWSM[T : Reads]: Reads[WebSocketMessage] =
     (__ \ "data").read[T].asInstanceOf[Reads[WebSocketMessage]]
@@ -21,19 +22,19 @@ trait PlayJsonSocketHelper extends JsonSocketHelper {
   private implicit val wsmReads: Reads[WebSocketMessage] = {
     import Reads.pure
     (__ \ "type").read[String].flatMap[WebSocketMessage] {
-      case "FindGame" => pure(FindGame)
-      case "StartGame" => pure(StartGame)
-      case "ExitGame" => pure(ExitGame)
-      case "ThrowCard" => readDataToWSM[ThrowCard]
-      case "ApplyCreature" => readDataToWSM[ApplyCreature]
+      case "FindBattle" => pure(FindBattle)
+      case "JoinBattle" => pure(JoinBattle)
+      case "ExitBattle" => pure(ExitBattle)
+      case "ActivateCard" => readDataToWSM[ActivateCard]
+      case "AttackCreature" => readDataToWSM[AttackCreature]
       case "FinishTurn" => pure(FinishTurn)
-      case "GameFound" => readDataToWSM[GameFound]
-      case "GamePaused" => pure(GamePaused)
-      case "GameResumed" => pure(GameResumed)
-      case "GameFinished" => pure(GameFinished)
+      case "BattleFound" => readDataToWSM[BattleFound]
+      case "BattlePaused" => pure(BattlePaused)
+      case "BattleResumed" => pure(BattleResumed)
+      case "BattleFinished" => pure(BattleFinished)
       case "FirstPlayerSelected" => readDataToWSM[FirstPlayerSelected]
       case "CardPulled" => readDataToWSM[CardPulled]
-      case "EnemyCardThrown" => readDataToWSM[EnemyCardThrown]
+      case "EnemyCardActivated" => readDataToWSM[EnemyCardActivated]
       case "EnemyCreatureApplied" => readDataToWSM[EnemyCreatureApplied]
       case "EnemyCardPulled" => pure(EnemyCardPulled)
       case "EnemyTurnFinished" => pure(EnemyTurnFinished)
@@ -48,19 +49,20 @@ trait PlayJsonSocketHelper extends JsonSocketHelper {
 
   private implicit val wsmWrites = new Writes[WebSocketMessage] {
     def writes(wsm: WebSocketMessage) = wsm match {
-      case FindGame => objWrites("FindGame")
-      case StartGame => objWrites("StartGame")
-      case ExitGame => objWrites("ExitGame")
-      case tc: ThrowCard => classWrites(tc)
-      case ac: ApplyCreature => classWrites(ac)
+      case FindBattle => objWrites("FindGame")
+      case JoinBattle => objWrites("StartGame")
+      case ExitBattle => objWrites("ExitGame")
+      case tc: ActivateCard => classWrites(tc)
+      case ac: AttackCreature => classWrites(ac)
+      case ap: AttackHeroByCreature => classWrites(ap)
       case FinishTurn => objWrites("FinishTurn")
-      case gf: GameFound => classWrites(gf)
-      case GamePaused => objWrites("GamePaused")
-      case GameResumed => objWrites("GameResumed")
-      case GameFinished => objWrites("GameFinished")
+      case gf: BattleFound => classWrites(gf)
+      case BattlePaused => objWrites("BattlePaused")
+      case BattleResumed => objWrites("GameResumed")
+      case BattleFinished => objWrites("GameFinished")
       case fps: FirstPlayerSelected => classWrites(fps)
       case cp: CardPulled => classWrites(cp)
-      case ect: EnemyCardThrown => classWrites(ect)
+      case ect: EnemyCardActivated => classWrites(ect)
       case eca: EnemyCreatureApplied => classWrites(eca)
       case EnemyCardPulled => objWrites("EnemyCardPulled")
       case EnemyTurnFinished => objWrites("EnemyTurnFinished")

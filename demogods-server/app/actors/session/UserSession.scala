@@ -1,6 +1,6 @@
 package actors.session
 
-import actors.game.Battle
+import actors.battle.Battle
 import actors.gameFinding.GameFinder
 import akka.actor._
 import com.typesafe.config.ConfigFactory
@@ -35,30 +35,32 @@ class UserSession(userId: UserId, gameFinder: ActorRef) extends FSM[State, Data]
   onTransition {
     case FindingGame -> WaitingPlayersConfirmation =>
       nextStateData match {
-        case ConnectedBattle(socketRef, battleRef, enemyName) => socketRef ! SocketProtocol.GameFound(enemyName)
+        case ConnectedBattle(socketRef, battleRef, enemyName) => socketRef ! SocketProtocol.BattleFound(enemyName)
       }
   }
 
   when(WaitingPlayersConfirmation) {
-    case Event(SocketProtocol.StartGame, cg: ConnectedBattle) =>
+    case Event(SocketProtocol.JoinBattle, cg: ConnectedBattle) =>
       cg.battleRef ! PlayerIsReady
       stay()
 
-    case Event(Battle.GameStarted, cg: ConnectedBattle) =>
+    case Event(Battle.Events.BattleStarted, cg: ConnectedBattle) =>
       goto(PlayingGame)
   }
 
   when(PlayingGame) {
     case Event(uc: SocketProtocol.UserCommand, ConnectedBattle(socketRef, battleRef, enemyName)) =>
       uc match {
-        case SocketProtocol.ThrowCard(cardId) =>
-          battleRef ! Battle.ThrowCard(cardId)
-        case SocketProtocol.ApplyCreature(creatureId, targetId) =>
-          battleRef ! Battle.ApplyCreature(creatureId, targetId)
+        case SocketProtocol.ActivateCard(cardId) =>
+          battleRef ! Battle.Commands.ActivateCard(cardId)
+        case SocketProtocol.AttackCreature(creatureId, targetId) =>
+          battleRef ! Battle.Commands.AttackCreature(creatureId, targetId)
+        case SocketProtocol.AttackHeroByCreature(creatureId) =>
+          battleRef ! Battle.Commands.AttackPlayerByCreature(creatureId)
         case SocketProtocol.FinishTurn =>
-          battleRef ! Battle.FinishTurn
-        case SocketProtocol.ExitGame =>
-          battleRef ! Battle.ExitGame
+          battleRef ! Battle.Commands.FinishTurn
+        case SocketProtocol.ExitBattle =>
+          battleRef ! Battle.Commands.ExitBattle
       }
       stay()
     case Event(GameFinished, g: ConnectedBattle) =>

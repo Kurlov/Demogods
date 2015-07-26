@@ -1,8 +1,8 @@
-package session
+package actors.session
 
 import java.util.UUID
 
-import actors.game.Battle
+import actors.battle.Battle
 import actors.gameFinding.GameFinder
 import actors.session._
 import akka.actor._
@@ -55,21 +55,21 @@ class UserSessionSpec(_system: ActorSystem) extends TestKit(_system) with Implic
     "start waiting players confirmation when the game is found" in new TestedSession {
       session.setState(FindingGame, ConnectedSocket(socketProbe.ref))
       session ! GameFinder.GameFound(battleProbe.ref, name)
-      socketProbe.expectMsg(SocketProtocol.GameFound(name))
+      socketProbe.expectMsg(SocketProtocol.BattleFound(name))
       session.stateName should be (WaitingPlayersConfirmation)
       session.stateData should be (ConnectedBattle(socketProbe.ref, battleProbe.ref, name))
     }
 
     "start forward playerReady signal to game" in new TestedSession {
       session.setState(WaitingPlayersConfirmation, ConnectedBattle(socketProbe.ref, battleProbe.ref, name))
-      session ! SocketProtocol.StartGame
+      session ! SocketProtocol.JoinBattle
       battleProbe.expectMsg(PlayerIsReady)
     }
 
     "become PlayingGame when got confirmation from battle" in new TestedSession {
       val data = ConnectedBattle(socketProbe.ref, battleProbe.ref, name)
       session.setState(WaitingPlayersConfirmation, data)
-      session ! Battle.GameStarted
+      session ! Battle.Events.BattleStarted
       session.stateName should be (PlayingGame)
       session.stateData should be (data)
     }
@@ -79,12 +79,12 @@ class UserSessionSpec(_system: ActorSystem) extends TestKit(_system) with Implic
       val uuid1 = UUID.randomUUID()
       val uuid2 = UUID.randomUUID()
       session.setState(PlayingGame, data)
-      session ! SocketProtocol.ApplyCreature(uuid1,uuid2)
-      battleProbe.expectMsg(Battle.ApplyCreature(uuid1, uuid2))
-      session ! SocketProtocol.ThrowCard(uuid1)
-      battleProbe.expectMsg(Battle.ThrowCard(uuid1))
+      session ! SocketProtocol.AttackCreature(uuid1,uuid2)
+      battleProbe.expectMsg(Battle.Commands.AttackCreature(uuid1, uuid2))
+      session ! SocketProtocol.ActivateCard(uuid1)
+      battleProbe.expectMsg(Battle.Commands.ActivateCard(uuid1))
       session ! SocketProtocol.FinishTurn
-      battleProbe.expectMsg(Battle.FinishTurn)
+      battleProbe.expectMsg(Battle.Commands.FinishTurn)
     }
 
     "handle closed socket during playing game" in new TestedSession {

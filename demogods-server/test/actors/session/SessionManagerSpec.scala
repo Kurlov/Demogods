@@ -1,4 +1,4 @@
-package session
+package actors.session
 
 import java.util.UUID
 
