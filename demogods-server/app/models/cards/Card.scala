@@ -4,11 +4,11 @@ import java.util.UUID
 
 
 sealed trait Card {
-  def id: UUID
+  def uuid: UUID
   def cost: Int
 }
 
-case class CreatureCard(id: UUID,
+case class CreatureCard(uuid: UUID,
                         name: String,
                         description: String,
                         damage: Int,

@@ -23,7 +23,7 @@ object CardsService {
   private val cards = cardsFiles.map{f =>
     val card = Json.parse(Source.fromFile(f)(Codec.UTF8).mkString).validate[CreatureCard]
       .getOrElse(throw new Exception(s"Can't parse card file ${f.getName}"))
-    card.id -> card
+    card.uuid -> card
   }.toMap
 
   def listCards = cards.values

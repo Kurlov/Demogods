@@ -25,7 +25,7 @@ class Player(battle: ActorRef)(implicit val battleContext: BattleContext)
   def receive = {
     case YourTurn => handleNewTurn()
     case Battle.Commands.ActivateCard(cardId) =>
-      cards.find(_.id == cardId).foreach(activateCard)
+      cards.find(_.uuid == cardId).foreach(activateCard)
     case CardPulled(card, player) if player == self => cards = card :: cards
     case TurnFinished => handleFinishedTurn()
       

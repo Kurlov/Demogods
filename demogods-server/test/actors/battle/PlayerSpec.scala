@@ -65,7 +65,7 @@ with Matchers with BeforeAndAfterAll {
       player ! Player.YourTurn
       player ! DispenserEvents.CardPulled(card, player)
       val energy = player.underlyingActor.energy.current
-      player ! Battle.Commands.ActivateCard(card.id)
+      player ! Battle.Commands.ActivateCard(card.uuid)
       player.underlyingActor.cards should be (List.empty)
       player.underlyingActor.energy.current should be (energy - card.cost)
     }
@@ -73,7 +73,7 @@ with Matchers with BeforeAndAfterAll {
     "restore energy on new turn" in new PlayerWithCard {
       player ! Player.YourTurn
       player ! DispenserEvents.CardPulled(card, player)
-      player ! Battle.Commands.ActivateCard(card.id)
+      player ! Battle.Commands.ActivateCard(card.uuid)
       player ! Player.YourTurn
       player.underlyingActor.energy.current should be (player.underlyingActor.energy.available)
     }

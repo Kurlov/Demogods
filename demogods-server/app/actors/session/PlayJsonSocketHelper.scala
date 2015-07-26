@@ -41,6 +41,7 @@ trait PlayJsonSocketHelper extends JsonSocketHelper {
       case "EnemyDisconnected" => pure(EnemyDisconnected)
       case "CreatureRaised" => readDataToWSM[CreatureRaised]
       case "EnemyCreatureRaised" => readDataToWSM[EnemyCreatureRaised]
+      case "AttackHeroByCreature" => readDataToWSM[AttackHeroByCreature]
     }
   }
 
@@ -49,17 +50,17 @@ trait PlayJsonSocketHelper extends JsonSocketHelper {
 
   private implicit val wsmWrites = new Writes[WebSocketMessage] {
     def writes(wsm: WebSocketMessage) = wsm match {
-      case FindBattle => objWrites("FindGame")
-      case JoinBattle => objWrites("StartGame")
-      case ExitBattle => objWrites("ExitGame")
+      case FindBattle => objWrites("FindBattle")
+      case JoinBattle => objWrites("JoinBattle")
+      case ExitBattle => objWrites("ExitBattle")
       case tc: ActivateCard => classWrites(tc)
       case ac: AttackCreature => classWrites(ac)
       case ap: AttackHeroByCreature => classWrites(ap)
       case FinishTurn => objWrites("FinishTurn")
       case gf: BattleFound => classWrites(gf)
       case BattlePaused => objWrites("BattlePaused")
-      case BattleResumed => objWrites("GameResumed")
-      case BattleFinished => objWrites("GameFinished")
+      case BattleResumed => objWrites("BattleResumed")
+      case BattleFinished => objWrites("BattleFinished")
       case fps: FirstPlayerSelected => classWrites(fps)
       case cp: CardPulled => classWrites(cp)
       case ect: EnemyCardActivated => classWrites(ect)

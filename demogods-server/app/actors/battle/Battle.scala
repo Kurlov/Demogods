@@ -22,7 +22,6 @@ private [battle] class Battle(player1Session: ActorRef, player2Session: ActorRef
 
   subscribe(self, classOf[CreatureEvent])
 
-
   startWith(State.WaitingPlayers, Data.UnconfirmedPlayers(Set(player1Session, player2Session)))
   
   when(State.WaitingPlayers) {
@@ -155,8 +154,6 @@ private [battle] class Battle(player1Session: ActorRef, player2Session: ActorRef
 
     Data.BattleData(player1Data, player2Data)
   }
-
-
 }
 
 object Battle {
