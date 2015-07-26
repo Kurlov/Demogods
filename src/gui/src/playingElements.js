@@ -105,12 +105,23 @@ PlayingElement.prototype.attack2 = function(target) {
     lightning.animations.add("ligntning", null, 60, true);
     lightning.animations.play("lightning");
     lightning.play("lightning");
+    lightning.bringToTop();
+
     var tween = game.add.tween(lightning);
+
+    var emitter = game.add.emitter(target._sprite.x, target._sprite.y, 50);
+    emitter.gravity = -400;
+    emitter.setAlpha(0.1, 0.3);
+    emitter.makeParticles("smoke", null, 50);
     function d() {
         lightning.destroy();
     }
+    function s() {
+        emitter.start(true, 800, null, 50);
+        console.log("D");
+    }
     tween.to( {x: 0, y: 0 }, 400);
-
+    tween.onStart.add(s);
     tween.onComplete.add(d);
     return tween.start();
 };
@@ -173,7 +184,7 @@ PlayingElement.prototype.checkIntersections = function() {
   */
 PlayingElement.prototype.onIntersection = function(target) {
     this.restorePosition();
-    this.attack(target);
+    this.attack2(target);
 };
 
 /**
