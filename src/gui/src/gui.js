@@ -38,6 +38,7 @@ states.play.prototype.preload = function() {
     this.load.image('energy_ball', 'assets/cards/energy_ball.png');
     this.load.spritesheet('lightning', 'assets/cards/lightning.png', 512, 64);
     this.load.image('smoke', 'assets/cards/smoke.png');
+    this.load.image('spark', 'assets/cards/spark.png');
     this.game.add.plugin(Phaser.Plugin.Debug);
 };
 

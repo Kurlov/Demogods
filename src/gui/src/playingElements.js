@@ -109,18 +109,25 @@ PlayingElement.prototype.attack2 = function(target) {
 
     var tween = game.add.tween(lightning);
 
-    var emitter = game.add.emitter(target._sprite.x, target._sprite.y, 50);
-    emitter.gravity = -400;
-    emitter.setAlpha(0.1, 0.3);
-    emitter.makeParticles("smoke", null, 50);
+    var smoke = game.add.emitter(target._sprite.x, target._sprite.y, 50);
+    smoke.gravity = -400;
+    smoke.setAlpha(0.1, 0.3);
+    smoke.makeParticles("smoke", null, 50);
+
+    var sparks = game.add.emitter(target._sprite.x, target._sprite.y, 10);
+    sparks.gravity = 100;
+    sparks.setScale(0.1, 0.3, 0.1, 0.3);
+    sparks.makeParticles("spark", null, 10);
+
     function d() {
         lightning.destroy();
     }
     function s() {
-        emitter.start(true, 800, null, 50);
+        smoke.start(true, 800, null, 50);
+        sparks.start(true, 800, null, 10);
         console.log("D");
     }
-    tween.to( {x: 0, y: 0 }, 400);
+    tween.to( {x: 0, y: 0 }, 200);
     tween.onStart.add(s);
     tween.onComplete.add(d);
     return tween.start();
