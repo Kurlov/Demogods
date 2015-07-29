@@ -150,7 +150,10 @@ states.play.prototype.preload = function() {
     this.load.image('player_deck1', 'assets/cards/playerDeck.png');
     this.load.image('playing_table', 'assets/cards/playingTable.png');
     this.load.image('energy_ball', 'assets/cards/energy_ball.png');
-    this.load.spritesheet('lightning', 'assets/cards/lightning.png', 512, 64);
+    this.load.image('lightning1', 'assets/cards/lightning1.png');
+    this.load.image('lightning2', 'assets/cards/lightning2.png');
+    this.load.image('lightning3', 'assets/cards/lightning3.png');
+    this.load.image('lightning4', 'assets/cards/lightning4.png');
     this.load.image('smoke', 'assets/cards/smoke.png');
     this.load.image('spark', 'assets/cards/spark.png');
     this.game.add.plugin(Phaser.Plugin.Debug);
