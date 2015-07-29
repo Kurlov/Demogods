@@ -69,8 +69,18 @@ states.lobby.prototype.preload = function() {
 };
 
 states.lobby.prototype.create = function() {
-    this.playButton = game.add.button(VIEWPORT_W * 0.8, VIEWPORT_H * 0.7, 'playButton', this.goPlay, this);
-    this.menuButton = game.add.button(VIEWPORT_W * 0.05, VIEWPORT_H * 0.7, 'menuButton', this.goMainMenu, this);
+    this.playButton = game.add.button(0, 0, 'playButton', this.goPlay, this);
+    this.menuButton = game.add.button(0, 0, 'menuButton', this.goMainMenu, this);
+
+    this.menuButton.width = Math.floor(0.5 * this.menuButton.width);
+    this.menuButton.height = this.menuButton.width;
+    this.playButton.width = Math.floor(0.5 * this.playButton.width);
+    this.playButton.height = this.playButton.width;
+
+    this.menuButton.y = Math.floor(0.95 * VIEWPORT_H) - this.menuButton.height;
+    this.playButton.y = Math.floor(0.95 * VIEWPORT_H) - this.playButton.height;
+    this.menuButton.x = Math.floor(0.05 * VIEWPORT_W);
+    this.playButton.x = Math.floor(0.95 * VIEWPORT_W) - this.playButton.width;
 
     this.username = game.add.text(0.1 * VIEWPORT_W, 0.1 * VIEWPORT_H, '...', { font: String(20) + "px Arial", fill: "#ffffff"});
     this.opponentName = game.add.text(0.7 * VIEWPORT_W, 0.1 * VIEWPORT_H, '...', { font: String(20) + "px Arial", fill: "#ffffff"});
