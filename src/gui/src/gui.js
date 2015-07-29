@@ -59,8 +59,6 @@ states.mainMenu.prototype.goLobby = function() {
  * @implements Phaser.State
  */
 states.lobby = function() {
-    this.user = '';
-    this.opponent = '';
     this.playButton = null;
     this.menuButton = null;
 };
@@ -74,7 +72,8 @@ states.lobby.prototype.create = function() {
     this.playButton = game.add.button(VIEWPORT_W * 0.8, VIEWPORT_H * 0.7, 'playButton', this.goPlay, this);
     this.menuButton = game.add.button(VIEWPORT_W * 0.05, VIEWPORT_H * 0.7, 'menuButton', this.goMainMenu, this);
 
-
+    this.username = game.add.text(0.1 * VIEWPORT_W, 0.1 * VIEWPORT_H, '...', { font: String(20) + "px Arial", fill: "#ffffff"});
+    this.opponentName = game.add.text(0.7 * VIEWPORT_W, 0.1 * VIEWPORT_H, '...', { font: String(20) + "px Arial", fill: "#ffffff"});
 };
 
 states.lobby.prototype.update = function() {
@@ -102,7 +101,7 @@ states.lobby.prototype.goMainMenu = function() {
  * @desc sets user's name, which is displayed
  */
 states.lobby.prototype.setMyName = function(name) {
-    this.user = name;
+    this.username.text = name;
 };
 
 /**
@@ -110,7 +109,7 @@ states.lobby.prototype.setMyName = function(name) {
  * @desc sets opponent's name, which is displayed
  */
 states.lobby.prototype.setOpponentsName = function(name) {
-    this.opponent = name;
+    this.opponentName.text = name;
 };
 
 /**
@@ -153,6 +152,7 @@ states.play.prototype.create = function() {
     this.player1 = new Player('player', 'assets/cards/player.png', 75, 75);
     this.player2 = new Player('player1', 'assets/cards/player1.png', 75, 675);
 
+    /// *** debug only ***
     this.populateSignal = new Phaser.Signal();
     this.populateSignal.add(this.populate, this);
 
@@ -160,6 +160,7 @@ states.play.prototype.create = function() {
 
     this.populateKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.populateKey.onDown = this.populateSignal;
+    //***********************
 };
 
 states.play.prototype.update = function() {
@@ -403,5 +404,27 @@ GUI.prototype.attack = function(attacker, target) {
         if ((from != undefined) && (to != undefined)) {
             return from.attack(to);
         }
+    }
+};
+
+/**
+ * @method GUI#setMyName
+ * @desc Sets user's name in lobby screen
+ * @param {string} name Name of user
+ */
+GUI.prototype.setMyName = function(name) {
+    if (game.state.current == 'lobby') {
+        game.state.getCurrentState().setMyName(name);
+    }
+};
+
+/**
+ * @method GUI#setOpponentsName
+ * @desc Sets user's name in lobby screen
+ * @param {string} name Name of opponent
+ */
+GUI.prototype.setOpponentsName = function(name) {
+    if (game.state.current == 'lobby') {
+        game.state.getCurrentState().setOpponentsName(name);
     }
 };

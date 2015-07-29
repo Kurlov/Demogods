@@ -4,10 +4,14 @@
 * make sure you have imported all dependencies in your html file (see **main.html** for example);  
 * create instance of GUI class via `new GUI();`
 * you will need a webserver to run;
-	 
+* Note: each API method belongs to it's own game state, and doesn't work if other state is active (nothing will happen if you do so)
+
 ## API:  
+### mainMenu state:
 * `showMainMenu()` - shows main menu  
-* `play()` - starts playing session. Parameters may be set both before and during this state. Currently called from main menu by big fancy "GO" button;  
+* `play()` - starts playing session. Currently called from main menu by big fancy "GO" button; 
+
+### play state:
 * `setPlayer1Health(health)` - obviously, sets player 1 health level (seen in top-left corner). Parameter is number;  
 * `setPlayer2Health(health)` - same for player 2;  
 * `addPlayer1Card(id, imageUrl)` - adds a card to first players' deck. **Id** must be unique string(still no checking implemented though), **imageUrl** is used for dynamic image loads (not implemented too, so it doesn't matter right now); sprite defined by id, which should be the same as image id preloaded during preload state; returns Card object; 
@@ -20,6 +24,10 @@
 * `moveMonster(id, position)` - Move monster to a new position an a table. **id** is unique id, **position** is new position of Monster.
 * `movePlayer1Card(id, position)` - same for player 1 cards.
 * `movePlayer2Card(id, position)` - same for player 2 cards.
+
+### lobby state:
+* `setMyName(name)` - set displayed username
+* `setOponnetnsName(name)` - set displayed opponents name
   
 Example can be seen in **main.js** file;
 API is obviously not complete, so place your feature request right on scrum table in "ToDo" section.  
