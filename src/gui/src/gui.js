@@ -82,8 +82,8 @@ states.lobby.prototype.create = function() {
     this.menuButton.x = Math.floor(0.05 * VIEWPORT_W);
     this.playButton.x = Math.floor(0.95 * VIEWPORT_W) - this.playButton.width;
 
-    this.username = game.add.text(0.1 * VIEWPORT_W, 0.1 * VIEWPORT_H, '...', { font: String(20) + "px Arial", fill: "#ffffff"});
-    this.opponentName = game.add.text(0.7 * VIEWPORT_W, 0.1 * VIEWPORT_H, '...', { font: String(20) + "px Arial", fill: "#ffffff"});
+    this.username = game.add.text(0.1 * VIEWPORT_W, 0.1 * VIEWPORT_H, '...', { font: String(20) + 'px Arial', fill: '#ffffff'});
+    this.opponentName = game.add.text(0.7 * VIEWPORT_W, 0.1 * VIEWPORT_H, '...', { font: String(20) + 'px Arial', fill: '#ffffff'});
 };
 
 states.lobby.prototype.update = function() {

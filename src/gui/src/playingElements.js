@@ -110,22 +110,22 @@ PlayingElement.prototype.attack = function(target) {
  */
 PlayingElement.prototype.attack2 = function(target) {
     var lightning = game.add.rope(0, 0, 'lightning', null, [new Phaser.Point(this.sprite.x, this.sprite.y), new Phaser.Point(target.sprite.x, target.sprite.y)]);
-    lightning.animations.add("ligntning", null, 60, true);
-    lightning.animations.play("lightning");
-    lightning.play("lightning");
+    lightning.animations.add('ligntning', null, 60, true);
+    lightning.animations.play('lightning');
+    lightning.play('lightning');
 
     var tween = game.add.tween(lightning);
 
     var smoke = game.add.emitter(target.sprite.x, target.sprite.y, 50);
     smoke.gravity = -400;
     smoke.setAlpha(1, 0, 1600);
-    smoke.makeParticles("smoke", null, 50);
+    smoke.makeParticles('smoke', null, 50);
 
     var sparks = game.add.emitter(target.sprite.x, target.sprite.y, 10);
     sparks.gravity = 100;
     sparks.setAlpha(1, 0, 2000);
     sparks.setScale(0.1, 0.3, 0.1, 0.3);
-    sparks.makeParticles("spark", null, 10);
+    sparks.makeParticles('spark', null, 10);
 
     function d() {
         lightning.destroy();
@@ -230,7 +230,7 @@ function Monster(id, imageUrl, x, y) {
     this.sprite.input.enableDrag();
 
     
-    var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + "px Arial", fill: "#ffffff"};
+    var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#ffffff'};
     this.health = game.add.text(this.sprite.x, this.sprite.y, '0', healthStyle);
 }
 
@@ -275,7 +275,7 @@ function Player(id, imageUrl, x, y) {
     PlayingElement.apply(this, arguments);
     this.sprite.inputEnabled = true;
     
-    var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + "px Arial", fill: "#ffffff"};
+    var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#ffffff'};
     this.health = game.add.text(this.sprite.x, this.sprite.y, '0', healthStyle);
 }
 
