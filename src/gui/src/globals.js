@@ -17,16 +17,25 @@ var VIEWPORT_H = Math.min(document.documentElement.clientHeight, window.innerHei
   * @desc Number of lines of elements, which should fit into screen
   */
 var TABLE_ZONES = 6; //weirdly big number, actual is 5
-/**
-  * @global
-  * @type {Array}
-  * @desc Contains all existing PlayingElements for intersection detection.
-  */
-var activeElements = []; // necessary for intersection detection; might need to re-implement using bus
 
+/**
+ * @global
+ * @desc Signal for intersection check for {@link PlayingElement}
+ * @type {Phaser.Signal}
+ */
+var attackSignal = new Phaser.Signal();
+
+/**
+ * @global
+ * @function dynamicImageLoad
+ * @desc Does sprite loading 'on the fly', after preload state. Used by {@link PlayingElement}
+ * @param {string} id Unique id of sprite (same as card's id)
+ * @param {string} imageUrl URL where sprite should be obtained
+ * @param {PlayingElement} item Item which sprite being added
+ */
 function dynamicImageLoad(id, imageUrl, item) {
     var loader = new Phaser.Loader(game);
-    loader.image(id, imageUrl);
+    loader.image(imageUrl, imageUrl);
     loader.onLoadComplete.add(function() {item.loadSprite(); item.fitToScreen();});
     loader.start();
     

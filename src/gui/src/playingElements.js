@@ -16,47 +16,49 @@
  * @arg {number} y Coordinate on y-axis
  */
 function PlayingElement(id, imageUrl, x, y) {
-    this._id = id;
-    this._imageUrl = imageUrl;
-    this._x = x;
-    this._y = y;
-    this._sprite = game.add.image(this._x, this._y, this._id);
-    dynamicImageLoad(this._id, this._imageUrl, this);
-    this._sprite.anchor = new Phaser.Point(0.5, 0.5);
+    this.id = id;
+    this.imageUrl = imageUrl;
+    this.sprite = game.add.image(x, y, this.imageUrl);
+    if (game.cache.checkImageKey(imageUrl)) {
+        this.fitToScreen();
+    } else {
+        dynamicImageLoad(this.id, this.imageUrl, this);
+    }
 
-    this._sprite.events.onDragStart.add(this.savePosition, this);
-    this._sprite.events.onDragStop.add(this.onDragStop, this);
-    this._sprite.events.onInputOver.add(this.onHover, this);
-    this._sprite.events.onInputOut.add(this.onHoverOut, this);
-    //TODO: implement dynamic image load
-    //this.fitToScreen();
+
+    this.sprite.anchor = new Phaser.Point(0.5, 0.5);
+
+    this.sprite.events.onDragStart.add(this.savePosition, this);
+    this.sprite.events.onDragStop.add(this.onDragStop, this);
+    this.sprite.events.onInputOver.add(this.onHover, this);
+    this.sprite.events.onInputOut.add(this.onHoverOut, this);
     
     this._prevX = null;
     this._prevY = null;
-    
+
+    attackSignal.add(this.checkIntersections, this);
 }
 PlayingElement.prototype.loadSprite = function() {
-    this._sprite.loadTexture(this._id);
+    this.sprite.loadTexture(this.imageUrl);
 };
 
 /** @method PlayingElement#onDragStop 
   * @desc DragnDrop stop event handler
-  * @returns {@link PlayingElement#checkIntersections} result
   */
 PlayingElement.prototype.onDragStop = function() {
-        var intersects = this.checkIntersections();
-        this.restorePosition();
-        return intersects;
+
+    attackSignal.dispatch(this);
+    this.restorePosition();
 };
 
 /** @method PlayingElement#fitToScreen 
   * @desc Resizes sprite according to user's display size
   */
 PlayingElement.prototype.fitToScreen = function() {
-    var originalSpriteHeight = this._sprite.height;
-    this._sprite.height = Math.floor(VIEWPORT_H / TABLE_ZONES);
-    //console.log(this._sprite.height);
-    this._sprite.width = Math.floor(this._sprite.width / (originalSpriteHeight / this._sprite.height));
+    var originalSpriteHeight = this.sprite.height;
+    this.sprite.height = Math.floor(VIEWPORT_H / TABLE_ZONES);
+    //console.log(this.sprite.height);
+    this.sprite.width = Math.floor(this.sprite.width / (originalSpriteHeight / this.sprite.height));
     
 };
 
@@ -65,21 +67,22 @@ PlayingElement.prototype.fitToScreen = function() {
  * @desc Item's hover event handler
  */
 PlayingElement.prototype.onHover = function() {
-    this._sprite.blendMode = PIXI.blendModes.ADD;
+    this.sprite.blendMode = PIXI.blendModes.ADD;
 };
 /**
  * @method PlayingElement#onHoverOut
  * @desc Item's hover out event handler
  */
 PlayingElement.prototype.onHoverOut = function() {
-    this._sprite.blendMode = PIXI.blendModes.NORMAL;
+    this.sprite.blendMode = PIXI.blendModes.NORMAL;
 };
 
 /** @method PlayingElement#destroy 
   * @desc destroys object
   */
 PlayingElement.prototype.destroy = function() {
-    this._sprite.destroy();
+    attackSignal.remove(this.checkIntersections, this);
+    this.sprite.destroy();
 };
 
 /** @method PlayingElement#attack
@@ -88,34 +91,39 @@ PlayingElement.prototype.destroy = function() {
   * @returns {Phaser.Tween} Tween being played
   */
 PlayingElement.prototype.attack = function(target) {
-    var energyBall = game.add.image(this._sprite.x, this._sprite.y, 'energy_ball');
+    var energyBall = game.add.image(this.sprite.x, this.sprite.y, 'energy_ball');
     energyBall.anchor = new Phaser.Point(0.5, 0.5);
     var tween = game.add.tween(energyBall);
     function d() {
         energyBall.destroy();
     }
-    tween.to( { x: target._x, y: target._y }, 400);
+    tween.to( { x: target.sprite.x, y: target.sprite.y }, 400);
     
     tween.onComplete.add(d);
     return tween.start();
 };
 
+/** @method PlayingElement#attack2
+ * @desc Plays another attack animation
+ * @arg {PlayingElement} target Object being attacked
+ * @returns {Phaser.Tween} Tween being played
+ */
 PlayingElement.prototype.attack2 = function(target) {
-    var lightning = game.add.rope(0, 0, 'lightning', null, [new Phaser.Point(this._x, this._y), new Phaser.Point(target._x, target._y)]);
+    var lightning = game.add.rope(0, 0, 'lightning', null, [new Phaser.Point(this.sprite.x, this.sprite.y), new Phaser.Point(target.sprite.x, target.sprite.y)]);
     lightning.animations.add("ligntning", null, 60, true);
     lightning.animations.play("lightning");
     lightning.play("lightning");
-    lightning.bringToTop();
 
     var tween = game.add.tween(lightning);
 
-    var smoke = game.add.emitter(target._sprite.x, target._sprite.y, 50);
+    var smoke = game.add.emitter(target.sprite.x, target.sprite.y, 50);
     smoke.gravity = -400;
-    smoke.setAlpha(0.1, 0.3);
+    smoke.setAlpha(1, 0, 1600);
     smoke.makeParticles("smoke", null, 50);
 
-    var sparks = game.add.emitter(target._sprite.x, target._sprite.y, 10);
+    var sparks = game.add.emitter(target.sprite.x, target.sprite.y, 10);
     sparks.gravity = 100;
+    sparks.setAlpha(1, 0, 2000);
     sparks.setScale(0.1, 0.3, 0.1, 0.3);
     sparks.makeParticles("spark", null, 10);
 
@@ -123,9 +131,9 @@ PlayingElement.prototype.attack2 = function(target) {
         lightning.destroy();
     }
     function s() {
+        lightning.bringToTop();
         smoke.start(true, 800, null, 50);
-        sparks.start(true, 800, null, 10);
-        console.log("D");
+        sparks.start(true, 1000, null, 10);
     }
     tween.to( {x: 0, y: 0 }, 200);
     tween.onStart.add(s);
@@ -138,7 +146,7 @@ PlayingElement.prototype.attack2 = function(target) {
   * @returns {Phaser.Rectangle}
   */
 PlayingElement.prototype.getBounds = function() {
-    return this._sprite.getBounds();
+    return this.sprite.getBounds();
 };
 
 /**
@@ -146,8 +154,8 @@ PlayingElement.prototype.getBounds = function() {
   * @desc Saves current element posistion
   */
 PlayingElement.prototype.savePosition = function() {
-    this._prevX = this._sprite.x;
-    this._prevY = this._sprite.y;
+    this._prevX = this.sprite.x;
+    this._prevY = this.sprite.y;
 };
 
 /**
@@ -156,8 +164,8 @@ PlayingElement.prototype.savePosition = function() {
   */
 PlayingElement.prototype.restorePosition = function() {
     if ((this._prevX != null) && (this._prevY != null)) {
-        this._sprite.x = this._prevX;
-        this._sprite.y = this._prevY;
+        this.sprite.x = this._prevX;
+        this.sprite.y = this._prevY;
     }
 };
 
@@ -166,21 +174,10 @@ PlayingElement.prototype.restorePosition = function() {
   * @desc checks if current element intersects any other in game. Returns true and calls PlayingElement#onIntersection if so
   * @returns {Boolean}
   */
-PlayingElement.prototype.checkIntersections = function() {
-    var index = -1;
-    for (var i = 0; i < activeElements.length; i++) {
-        if (Phaser.Rectangle.intersects(new Phaser.Rectangle(this._sprite.x, this._sprite.y, 2, 2),
-                                        activeElements[i].getBounds()) && 
-           (this != activeElements[i])) {
-                index = i;
-                break;
-            }
-    }
-    if (index != -1) {
-        this.onIntersection(activeElements[index]);
-        return true;
-    } else {
-        return false;
+PlayingElement.prototype.checkIntersections = function(attacker) {
+    if (Phaser.Rectangle.intersects(new Phaser.Rectangle(attacker.sprite.x, attacker.sprite.y, 2, 2),
+                                    this.sprite.getBounds()) && attacker != this) {
+        attacker.onIntersection(this);
     }
 };
 
@@ -205,28 +202,16 @@ PlayingElement.prototype.onIntersection = function(target) {
  */ 
 function Card(id, imageUrl, x, y) {
     PlayingElement.apply(this, arguments);
-    this._sprite.inputEnabled = true;
-    this._sprite.input.enableDrag();
-    activeElements.push(this);
+    this.sprite.inputEnabled = true;
+    this.sprite.input.enableDrag();
 }
 
 Card.prototype = Object.create(PlayingElement.prototype);
 Card.prototype.constructor = PlayingElement;
 
 Card.prototype.destroy = function() {
-    var gindex = -1;
-    for (var i = 0; i < activeElements.length; i++) {
-        if (activeElements[i]._id === this._id) {
-            gindex = i;
-            break;
-        }
-    }
-    //activeElements[gindex].destroy();
-    if (gindex != -1) {
-        activeElements.splice(gindex, 1);
-    }
-    
-    this._sprite.destroy();
+    attackSignal.remove(this.checkIntersections, this);
+    this.sprite.destroy();
 };
 
 
@@ -241,14 +226,12 @@ Card.prototype.destroy = function() {
  */
 function Monster(id, imageUrl, x, y) {
     PlayingElement.apply(this, arguments);
-    this._sprite.inputEnabled = true;
-    this._sprite.input.enableDrag();
+    this.sprite.inputEnabled = true;
+    this.sprite.input.enableDrag();
 
     
-    var healthStyle = { font: String(Math.floor(this._sprite.height / 5)) + "px Arial", fill: "#ffffff"};
-    this._health = game.add.text(this._sprite.x, this._sprite.y, '0', healthStyle);
-    activeElements.push(this);
-    
+    var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + "px Arial", fill: "#ffffff"};
+    this.health = game.add.text(this.sprite.x, this.sprite.y, '0', healthStyle);
 }
 
 Monster.prototype = Object.create(PlayingElement.prototype);
@@ -260,25 +243,14 @@ Monster.prototype.constructor = PlayingElement;
   * @arg {number} Health level
   */
 Monster.prototype.setHealth = function(health) {
-    this._health.text = health;
+    this.health.text = health;
 };
 
 Monster.prototype.destroy = function() {
-    var gindex = -1;
-    for (var i = 0; i < activeElements.length; i++) {
-        if (activeElements[i]._id === this._id) {
-            gindex = i;
-            break;
-        }
-    }
-    //activeElements[gindex].destroy();
-    if (gindex != -1) {
-        activeElements.splice(gindex, 1);
-    }
-
-    this._sprite.destroy();
-    this._health.text= '';
-    this._health.destroy();
+    attackSignal.remove(this.checkIntersections, this);
+    this.sprite.destroy();
+    this.health.text= '';
+    this.health.destroy();
 };
 
 /**
@@ -286,8 +258,8 @@ Monster.prototype.destroy = function() {
   * @desc Redraws monster on call. Must be called on global update.
   */
 Monster.prototype.update = function() {
-    this._health.x = this._sprite.x;
-    this._health.y = this._sprite.y;
+    this.health.x = this.sprite.x;
+    this.health.y = this.sprite.y;
 };
 
 /**
@@ -301,10 +273,10 @@ Monster.prototype.update = function() {
  */
 function Player(id, imageUrl, x, y) {
     PlayingElement.apply(this, arguments);
-    this._sprite.inputEnabled = true;
+    this.sprite.inputEnabled = true;
     
-    var healthStyle = { font: String(Math.floor(this._sprite.height / 5)) + "px Arial", fill: "#ffffff"};
-    this._health = game.add.text(this._sprite.x, this._sprite.y, '0', healthStyle);
+    var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + "px Arial", fill: "#ffffff"};
+    this.health = game.add.text(this.sprite.x, this.sprite.y, '0', healthStyle);
 }
 
 Player.prototype = Object.create(PlayingElement.prototype);
@@ -316,13 +288,13 @@ Player.prototype.constructor = PlayingElement;
   * @arg {number} Health level
   */
 Player.prototype.setHealth = function(health) {
-    this._health.text = health;
+    this.health.text = health;
 };
 
 Player.prototype.destroy = function() {
-    this._sprite.destroy();
-    this._health.text = '';
-    this._health.destroy();
+    this.sprite.destroy();
+    this.health.text = '';
+    this.health.destroy();
 };
 
 

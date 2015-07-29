@@ -37,30 +37,30 @@ QUnit.test( "savePosition", function( assert ) {
 QUnit.test( "restorePosition", function( assert ) {
     var item1 = new Card('test_attack', 'tests/energy_ball.png', 300, 0);
     item1.savePosition();
-    item1._sprite.x = 1000;
-    item1._sprite.y = 1000;
+    item1.sprite.x = 1000;
+    item1.sprite.y = 1000;
     item1.restorePosition();
-    assert.ok((item1._sprite.x == 300) && (item1._sprite.y == 0));
+    assert.ok((item1.sprite.x == 300) && (item1.sprite.y == 0));
 });
 
 QUnit.test( "Monster.setHealth()", function( assert ) {
-    item = new Monster('test', 'test.png', 0, 0);
+    var item = new Monster('test', 'test.png', 0, 0);
     item.setHealth(120);
-    assert.ok(item._health.text == 120);
+    assert.ok(item.health.text == 120);
 });
 
 QUnit.test( "Monster.update()", function( assert ) {
-    item = new Monster('test', 'test.png', 0, 0);
-    item._sprite.x = 200;
-    item._sprite.y = 200;
+    var item = new Monster('test', 'test.png', 0, 0);
+    item.sprite.x = 200;
+    item.sprite.y = 200;
     item.update();
-    assert.ok((item._health.x == 200) && (item._health.y == 200));
+    assert.ok((item.health.x == 200) && (item.health.y == 200));
 });
 
 QUnit.test( "Player.setHealth()", function( assert ) {
-    item = new Player('test', 'test.png', 0, 0);
+    var item = new Player('test', 'test.png', 0, 0);
     item.setHealth(120);
-    assert.ok(item._health.text == 120);
+    assert.ok(item.health.text == 120);
 });
 
 QUnit.module("Table zones");
@@ -80,7 +80,7 @@ QUnit.test( "TableZone.addItem()", function( assert ) {
     var zone = new TableZone('test.png');
     var playingElement = zone.addItem('pe_test', 'test.png');
     assert.ok(playingElement instanceof PlayingElement);
-    assert.ok(playingElement._id = 'pe_test');
+    assert.ok(playingElement.id = 'pe_test');
 });
 
 QUnit.test( "TableZone.deleteItem()", function( assert ) {
@@ -88,8 +88,8 @@ QUnit.test( "TableZone.deleteItem()", function( assert ) {
     zone.addItem('pe_test2', 'test.png');
     zone.deleteItem('pe_test2');
     var index = -1;
-    for (var i = 0; i < zone._items.length; i++) {
-        if (zone._items[i]._id == 'pe_test2') {
+    for (var i = 0; i < zone.items.length; i++) {
+        if (zone.items[i].id == 'pe_test2') {
             index = i;
         }
     }
@@ -117,32 +117,32 @@ QUnit.test("TableZone.moveToPosition()", function(assert) {
     zone.addItem('TZ2', 'test.png');
     zone.addItem('TZ3', 'test.png');
     zone.moveToPosition("TZ3", 0);
-    assert.ok(zone._items[0]._id == "TZ3");
+    assert.ok(zone.items[0].id == "TZ3");
 });
 
 QUnit.test( "PlayerDeck.addItem()", function( assert ) {
     var zone = new PlayerDeck('test.png', true);
     var playingElement = zone.addItem('pe_test3', 'test.png');
     assert.ok(playingElement instanceof Card);
-    assert.ok(playingElement._id = 'pe_test3');
+    assert.ok(playingElement.id = 'pe_test3');
 });
 
 QUnit.test( "PlayingArea.addItem()", function( assert ) {
     var zone = new PlayingArea('test.png', 0, 0);
     var playingElement = zone.addItem('pe_test4', 'test.png', 95);
     assert.ok(playingElement instanceof Monster);
-    assert.ok(playingElement._id = 'pe_test4');
-    assert.ok(playingElement._health.text == 95);
+    assert.ok(playingElement.id = 'pe_test4');
+    assert.ok(playingElement.health.text == 95);
 });
 
 QUnit.test( "PlayingArea.update()", function( assert ) {
     var zone = new PlayingArea('test.png', 0, 0);
     zone.addItem('pe_test4', 'test.png', 95);
-    zone._items[0]._sprite.x = 500;
-    zone._items[0]._sprite.y = 500;
+    zone.items[0].sprite.x = 500;
+    zone.items[0].sprite.y = 500;
     zone.update();
-    assert.ok(zone._items[0]._health.x == 500);
-    assert.ok(zone._items[0]._health.y == 500);
+    assert.ok(zone.items[0].health.x == 500);
+    assert.ok(zone.items[0].health.y == 500);
 });
 
 QUnit.module("Global");
@@ -150,7 +150,7 @@ QUnit.test("TABLE_ZONES > 0", function( assert ) {
     assert.ok(TABLE_ZONES > 0);
 });
 
-QUnit.module("API");
+//QUnit.module("API");
 //QUnit.test("showMainMenu", function( assert ) {
 //  var done = assert.async();
 //  gui.showMainMenu();
@@ -171,23 +171,24 @@ QUnit.module("API");
 //  }, 100);
 //});
 
-QUnit.test("addPlayer1Card()", function( assert ) {
-    var numOfItems = gui.player1Items.length;
-    gui.addPlayer1Card('api', 'api.png');
-    assert.ok(gui.player1Items.length - numOfItems == 1);
-});
-
-QUnit.test("addPlayer2Card()", function( assert ) {
-    var numOfItems = gui.player2Items.length;
-    gui.addPlayer2Card('api2', 'api2.png');
-    assert.ok(gui.player2Items.length - numOfItems == 1);
-});
-
-QUnit.test("addMonster()", function( assert ) {
-    var numOfItems = gui.playingTableItems.length;
-    gui.addMonster('api3', 'api3.png', 50);
-    assert.ok(gui.playingTableItems.length - numOfItems == 1);
-});
+//QUnit.test("addPlayer1Card()", function( assert ) {
+//    var g = new GUI();
+//    function assrt() {
+//        assert.ok(g.addPlayer1Card('api', 'api.png') instanceof Card);
+//    }
+//    g._tg.state.onInitCallback = assrt;
+//    g.play();
+//});
+//
+//QUnit.test("addPlayer2Card()", function( assert ) {
+//    var item = gui.addPlayer2Card('api2', 'api2.png');
+//    assert.ok(item instanceof Card);
+//});
+//
+//QUnit.test("addMonster()", function( assert ) {
+//    var item = gui.addMonster('api3', 'api3.png', 50);
+//    assert.ok(item instanceof Monster);
+//});
 //QUnit.test("attack()", function(assert) {
 //    gui.play();
 //    gui.addPlayer1Card('a1', 'a1.png');
