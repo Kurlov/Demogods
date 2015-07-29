@@ -39,7 +39,7 @@ states.mainMenu.prototype.create = function() {
 };
 
 /**
-  * @method mainMenu#goPlay
+  * @method states.mainMenu#goPlay
   * @desc starts a playing state
   */
 states.mainMenu.prototype.goPlay = function() {
@@ -91,7 +91,7 @@ states.lobby.prototype.update = function() {
 };
 
 /**
- * @method lobby#goPlay
+ * @method states.lobby#goPlay
  * @desc Starts a playing state
  */
 states.lobby.prototype.goPlay = function() {
@@ -99,7 +99,7 @@ states.lobby.prototype.goPlay = function() {
 };
 
 /**
- * @method lobby#goMainMenu
+ * @method states.lobby#goMainMenu
  * @desc Starts a main menu state
  */
 states.lobby.prototype.goMainMenu = function() {
@@ -107,16 +107,18 @@ states.lobby.prototype.goMainMenu = function() {
 };
 
 /**
- * @method lobby#setMyName
+ * @method states.lobby#setMyName
  * @desc sets user's name, which is displayed
+ * @arg {string} name Username
  */
 states.lobby.prototype.setMyName = function(name) {
     this.username.text = name;
 };
 
 /**
- * @method lobby#setOpponentsName
+ * @method states.lobby#setOpponentsName
  * @desc sets opponent's name, which is displayed
+ * @arg {string} name Opponent's name
  */
 states.lobby.prototype.setOpponentsName = function(name) {
     this.opponentName.text = name;
@@ -178,7 +180,7 @@ states.play.prototype.update = function() {
 };
 
 /**
- * @method play#populate
+ * @method states.play#populate
  * @desc Adds cards and monsters to playing table using GUI API. For testing purposes.
  */
 states.play.prototype.populate = function() {
@@ -225,8 +227,8 @@ GUI.prototype.play = function() {
 /**
  * @method GUI#addPlayer1Card
  * @desc Adds card to the first player's deck
- * @arg {string} _id Unique id of the {@link Card}
- * @arg {string} _imageUrl URL to an image, whick will be shown ingame
+ * @arg {string} id Unique id of the {@link Card}
+ * @arg {string} imageUrl URL to an image, whick will be shown ingame
  * @returns {@link Card} Item being added, false otherwise
  */
 GUI.prototype.addPlayer1Card = function(id, imageUrl) {
@@ -241,8 +243,8 @@ GUI.prototype.addPlayer1Card = function(id, imageUrl) {
 /**
  * @method GUI#addPlayer2Card
  * @desc Adds card to the second player's deck
- * @arg {string} _id Unique id of the {@link Card}
- * @arg {string} _imageUrl URL to an image, whick will be shown ingame
+ * @arg {string} id Unique id of the {@link Card}
+ * @arg {string} imageUrl URL to an image, whick will be shown ingame
  * @returns {@link Card} Item being added, false otherwise
  */
 GUI.prototype.addPlayer2Card = function(id, imageUrl) {
@@ -256,9 +258,9 @@ GUI.prototype.addPlayer2Card = function(id, imageUrl) {
 /**
  * @method GUI#addMonster
  * @desc Adds monster to the playing table
- * @arg {string} _id Unique id of the {@link Card}
- * @arg {string} _imageUrl URL to an image, whick will be shown ingame
- * @arg {number} _health Monster's health
+ * @arg {string} id Unique id of the {@link Card}
+ * @arg {string} imageUrl URL to an image, whick will be shown ingame
+ * @arg {number} health Monster's health
  * @returns {@link Monster} Item being added, false otherwise
  */
 GUI.prototype.addMonster = function(id, imageUrl, health) {
