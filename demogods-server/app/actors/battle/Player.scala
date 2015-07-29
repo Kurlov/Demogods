@@ -6,9 +6,9 @@ import akka.actor.{ActorRefFactory, Props, ActorRef, Actor}
 import models.cards.{CreatureCard, Card}
 
 
-class Player(battle: ActorRef,
-             creatureMaker: (ActorRefFactory, CreatureCard, UUID) => ActorRef)
+class Player(battle: ActorRef)(implicit val battleContext: BattleContext)
   extends Actor {
+  this: CreatureMakerProvider =>
 
   import Player._
   import DispenserEvents.CardPulled
@@ -25,7 +25,7 @@ class Player(battle: ActorRef,
   def receive = {
     case YourTurn => handleNewTurn()
     case Battle.Commands.ActivateCard(cardId) =>
-      cards.find(_.id == cardId).foreach(activateCard)
+      cards.find(_.uuid == cardId).foreach(activateCard)
     case CardPulled(card, player) if player == self => cards = card :: cards
     case TurnFinished => handleFinishedTurn()
       
@@ -49,9 +49,8 @@ class Player(battle: ActorRef,
 }
 
 object Player {
-  def props(battle: ActorRef,
-            creatureMaker: (ActorRefFactory, CreatureCard, UUID) => ActorRef) =
-    Props(new Player(battle, creatureMaker))
+  def props(battle: ActorRef)(implicit battleContext: BattleContext) =
+    Props(new Player(battle) with ProductionCreatureMakerProvider)
 
   case object YourTurn
   case object TurnFinished

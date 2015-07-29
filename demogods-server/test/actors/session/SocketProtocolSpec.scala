@@ -1,4 +1,4 @@
-package session
+package actors.session
 
 import java.util.UUID
 
@@ -13,44 +13,47 @@ class SocketProtocolSpec extends FlatSpec with Matchers {
   def test(wsm: WebSocketMessage) = assert(wsm == socketHelper.fromJson(socketHelper.toJson(wsm)).get)
 
 
-  "PlayJsonSocketHelper" should "correctly serialize FindGame" in {
-    test(FindGame)
+  "PlayJsonSocketHelper" should "correctly serialize FindBattle" in {
+    test(FindBattle)
   }
 
-  it should "correctly serialize ExitGame" in {
-    test(ExitGame)
+  it should "correctly serialize ExitBattle" in {
+    test(ExitBattle)
   }
 
-  it should "correctly serialize StartGame" in {
-    test(StartGame)
+  it should "correctly serialize JoinBattle" in {
+    test(JoinBattle)
   }
 
-  it should "correctly serialize ThrowCard" in {
-    test(ThrowCard(UUID.randomUUID()))
+  it should "correctly serialize ActivateCard" in {
+    test(ActivateCard(UUID.randomUUID()))
   }
 
   it should "correctly serialize ApplyCreature" in {
-    test(ApplyCreature(UUID.randomUUID(), UUID.randomUUID()))
+    test(AttackCreature(UUID.randomUUID(), UUID.randomUUID()))
+  }
+  it should "correctly serialize AttackPlayerByCreature" in {
+    test(AttackHeroByCreature(UUID.randomUUID()))
   }
 
   it should "correctly serialize FinishTurn" in {
     test(FinishTurn)
   }
 
-  it should "correctly serialize GameFound" in {
-    test(GameFound("foo"))
+  it should "correctly serialize BattleFound" in {
+    test(BattleFound("foo"))
   }
 
-  it should "correctly serialize GamePaused" in {
-    test(GamePaused)
+  it should "correctly serialize BattlePaused" in {
+    test(BattlePaused)
   }
 
-  it should "correctly serialize GameResumed" in {
-    test(GameResumed)
+  it should "correctly serialize BattleResumed" in {
+    test(BattleResumed)
   }
 
-  it should "correctly serialize GameFinished" in {
-    test(GameFinished)
+  it should "correctly serialize BattleFinished" in {
+    test(BattleFinished)
   }
 
   it should "correctly serialize FirstPlayerSelected" in {
@@ -61,8 +64,8 @@ class SocketProtocolSpec extends FlatSpec with Matchers {
     test(CardPulled(UUID.randomUUID()))
   }
 
-  it should "correctly serialize EnemyCardThrown" in {
-    test(EnemyCardThrown(UUID.randomUUID()))
+  it should "correctly serialize EnemyCardActivated" in {
+    test(EnemyCardActivated(UUID.randomUUID()))
   }
 
   it should "correctly serialize EnemyCreatureApplied" in {

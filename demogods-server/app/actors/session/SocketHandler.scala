@@ -10,7 +10,6 @@ class SocketHandler(userId: UserId, out: ActorRef, sessionManager: ActorRef) ext
   this: JsonSocketHelper =>
 
   import SocketProtocol._
-  //noinspection UnitInMap
   def receive = {
     case HereIsYourSession(sessionRef) =>
       unstashAll()

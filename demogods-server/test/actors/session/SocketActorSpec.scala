@@ -1,4 +1,4 @@
-package session
+package actors.session
 
 import java.util.UUID
 
@@ -35,31 +35,31 @@ class SocketActorSpec(_system: ActorSystem) extends TestKit(_system) with Implic
 
   "A SocketActor actor" must {
 
-    "send UserConnected messages to session manager on start" in {
+    "send UserConnected messages to actors.session manager on start" in {
       val outProbe = TestProbe()
       val sessionMangerProbe = TestProbe()
       system.actorOf(SocketHandler.props(userId, outProbe.ref, sessionMangerProbe.ref))
       sessionMangerProbe.expectMsg(SessionManager.UserConnected(userId))
     }
 
-    "use received session" in {
+    "use received actors.session" in {
       val outProbe = TestProbe()
       val sessionMangerProbe = TestProbe()
       val sessionProbe = TestProbe()
       val socket = system.actorOf(SocketHandler.props(userId, outProbe.ref, sessionMangerProbe.ref))
       socket ! HereIsYourSession(sessionProbe.ref)
-      socket ! jsonHelper.toJson(SocketProtocol.FindGame)
-      sessionProbe.expectMsg(SocketProtocol.FindGame)
+      socket ! jsonHelper.toJson(SocketProtocol.FindBattle)
+      sessionProbe.expectMsg(SocketProtocol.FindBattle)
     }
 
     "handle UserCommand as json" in {
       val (socket, outProbe, sessionMangerProbe, sessionProbe) = socketAndEnvironment
-      socket ! jsonHelper.toJson(SocketProtocol.FindGame)
-      sessionProbe.expectMsg(SocketProtocol.FindGame)
+      socket ! jsonHelper.toJson(SocketProtocol.FindBattle)
+      sessionProbe.expectMsg(SocketProtocol.FindBattle)
     }
 
     "reject ServerEvent as json" in {
-      val gameFound = SocketProtocol.GameFound("foo")
+      val gameFound = SocketProtocol.BattleFound("foo")
       val (socket, outProbe, sessionMangerProbe, sessionProbe) = socketAndEnvironment
       val json = jsonHelper.toJson(gameFound)
       val wrappedJson = jsonHelper.wrapUnknown(json)
@@ -69,7 +69,7 @@ class SocketActorSpec(_system: ActorSystem) extends TestKit(_system) with Implic
     }
 
     "accept ServerEvent as case class" in {
-      val gameFound = SocketProtocol.GameFound("foo")
+      val gameFound = SocketProtocol.BattleFound("foo")
       val (socket, outProbe, sessionMangerProbe, sessionProbe) = socketAndEnvironment
       val json = jsonHelper.toJson(gameFound)
       socket ! gameFound
