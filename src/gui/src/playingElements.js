@@ -268,9 +268,10 @@ function Monster(id, imageUrl, x, y) {
     this.sprite.inputEnabled = true;
     this.sprite.input.enableDrag();
 
-    
+
     var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#ffffff'};
     this.health = game.add.text(this.sprite.x, this.sprite.y, '0', healthStyle);
+    onSpawn.dispatch();
 }
 
 Monster.prototype = Object.create(PlayingElement.prototype);
@@ -290,6 +291,7 @@ Monster.prototype.destroy = function() {
     this.sprite.destroy();
     this.health.text= '';
     this.health.destroy();
+    onDeath.dispatch();
 };
 
 /**
@@ -299,6 +301,17 @@ Monster.prototype.destroy = function() {
 Monster.prototype.update = function() {
     this.health.x = this.sprite.x;
     this.health.y = this.sprite.y;
+};
+
+/**
+ * @method Monster#attack
+ * @param {PlayingElement} target Target of attack
+ * @override
+ */
+Monster.prototype.attack = function(target) {
+    PlayingElement.prototype.attack.call(this, target);
+    onAttack.dispatch();
+    console.log("Attacking");
 };
 
 /**

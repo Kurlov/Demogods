@@ -23,8 +23,33 @@ var TABLE_ZONES = 6; //weirdly big number, actual is 5
  * @desc Signal for intersection check for {@link PlayingElement}
  * @private
  * @type {Phaser.Signal}
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
  */
 var attackSignal = new Phaser.Signal();
+
+/**
+ * @global
+ * @desc Signal dispatched when {@link PlayingElement} attack happens
+ * @type {Phaser.Signal}
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
+ */
+var onAttack = new Phaser.Signal();
+
+/**
+ * @global
+ * @desc Signal dispatched when {@link Monster} spawns on table
+ * @type {Phaser.Signal}
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
+ */
+var onSpawn = new Phaser.Signal();
+
+/**
+ * @global
+ * @desc Signal dispatched when {@link Monster} dies
+ * @type {Phaser.Signal}
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
+ */
+var onDeath = new Phaser.Signal();
 
 /**
  * @global
