@@ -82,22 +82,12 @@ TableZone.prototype.getItemIndex = function (id) {
     return index;
 };
 
-TableZone.prototype.getOpponentItemIndex = function (id) {
-    var index = -1;
-    for (var i = 0; i < this.opponentItems.length; i++) {
-        if (this.opponentItems[i].id === id) {
-            index = i;
-            break;
-        }
-    }
-    return index;
-};
 
 /**
  * @method TableZone#getItem
  * @desc Finds item by it's id in items array
  * @arg {string} id Id of element
- * @returns {number} Returns  item object, none otherwise
+ * @returns {PlayingElement} Returns item object, none otherwise
  */
 TableZone.prototype.getItem = function (id) {
     var index = this.getItemIndex(id);
@@ -126,7 +116,7 @@ TableZone.prototype.moveToPosition = function(id, position) {
  */
 TableZone.prototype.redrawItems = function() {
     for (var i = 0; i < this.items.length; i++) {
-        this.items[i].sprite.x = this.elementWidth * i + this.elementWidth + this.x;
+        this.items[i].sprite.x = this.elementWidth * (i + 1) + this.x;
     }
 };
 
@@ -148,6 +138,8 @@ function PlayerDeck(backgroundImage, bottom) {
     this.sprite.x = this.x;
     this.sprite.y = this.y;
     this.sprite.width = Math.floor(VIEWPORT_W - this.x);
+
+    cardDeathSignal.add(this.onCardDeath, this);
 }
 
 PlayerDeck.prototype = Object.create(TableZone.prototype);
@@ -161,11 +153,22 @@ PlayerDeck.prototype.constructor = TableZone;
  * @arg {string} attackType Defines attack animation
  * @returns {Card} Element being added
  */
-PlayerDeck.prototype.addItem = function (id, imageUrl, attackType) {
+PlayerDeck.prototype.addItem = function (id, imageUrl, attackType, price) {
     var item = new Card(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 2), attackType);
+    item.setPrice(price);
     this.items.push(item);
     return item;
-    //activeElements.push(item);
+};
+
+PlayerDeck.prototype.onCardDeath = function(card) {
+    this.deleteItem(card.id);
+    this.redrawItems();
+};
+
+PlayerDeck.prototype.update = function() {
+    for (var i = 0; i < this.items.length; i++) {
+        this.items[i].update();
+    }
 };
 
 /**
@@ -185,6 +188,8 @@ function PlayingArea(backgroundImage, x, y) {
     this.sprite.height = 0.66 * VIEWPORT_H;
     
     this.opponentItems = [];
+
+    spawnSignal.add(this.cardHandler, this);
 }
 
 PlayingArea.prototype = Object.create(TableZone.prototype);
@@ -197,7 +202,7 @@ PlayingArea.prototype.constructor = TableZone;
  * @arg {string} imageUrl URL of an image, which will be shown ingame
  * @arg {string} attackType Defines attack animation
  * @returns {Monster} Element being added
-  */
+ */
 PlayingArea.prototype.addItem = function (id, imageUrl, attackType, health) {
     var item = new Monster(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 4), attackType);
     item.setHealth(health);
@@ -229,7 +234,7 @@ PlayingArea.prototype.update = function() {
         this.items[i].update();
     }
     for (i = 0; i < this.opponentItems.length; i++) {
-        this.items[i].update();
+        this.opponentItems[i].update();
     }
 };
 
@@ -248,5 +253,25 @@ PlayingArea.prototype.deleteOpponentItem = function(id) {
         return true;
     } else {
         return false;
+    }
+};
+
+PlayingArea.prototype.getOpponentItemIndex = function (id) {
+    var index = -1;
+    for (var i = 0; i < this.opponentItems.length; i++) {
+        if (this.opponentItems[i].id === id) {
+            index = i;
+            break;
+        }
+    }
+    return index;
+};
+
+PlayingArea.prototype.cardHandler = function(card) {
+    if (Phaser.Rectangle.intersects(new Phaser.Rectangle(card.sprite.x, card.sprite.y, 2, 2),
+            this.sprite.getBounds())) {
+        card.spawn(this);
+    } else {
+        card.restorePosition();
     }
 };

@@ -21,7 +21,6 @@ var TABLE_ZONES = 6; //weirdly big number, actual is 5
 /**
  * @global
  * @desc Signal for intersection check for {@link PlayingElement}
- * @private
  * @type {Phaser.Signal}
  * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
  */
@@ -30,7 +29,6 @@ var attackSignal = new Phaser.Signal();
 /**
  * @global
  * @desc Signal for intersection check for {@link Card}
- * @private
  * @type {Phaser.Signal}
  * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
  */
@@ -38,10 +36,24 @@ var spawnSignal = new Phaser.Signal();
 
 /**
  * @global
+ * @desc Signal for correct removing from {@link PlayerDeck}
+ * @type {Phaser.Signal}
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
+ */
+
+var cardDeathSignal = new Phaser.Signal();
+
+/**
+ * @global
  * @desc Signal dispatched when {@link PlayingElement} attack happens
  * @type {Phaser.Signal}
  * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
  */
+
+
+
+
+
 var onAttack = new Phaser.Signal();
 
 /**

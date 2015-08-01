@@ -184,6 +184,8 @@ states.play.prototype.create = function() {
 
 states.play.prototype.update = function() {
     this.playingTable.update();
+    this.player1Deck.update();
+    this.player2Deck.update();
 };
 
 /**
@@ -193,8 +195,12 @@ states.play.prototype.update = function() {
 states.play.prototype.populate = function() {
     this.gui.setPlayer1Health(20);
     this.gui.setPlayer2Health(30);
-    this.gui.addPlayer1Card('cyan_card', 'assets/cards/cyan.png', 'lightning');
-    this.gui.addPlayer2Card('yellow_card', 'assets/cards/yellow.png', 'lightning');
+    this.gui.addPlayer1Card('cyan_card1', 'assets/cards/cyan.png', 'lightning',1);
+    this.gui.addPlayer1Card('cyan_card2', 'assets/cards/cyan.png', 'lightning',2);
+    this.gui.addPlayer1Card('cyan_card3', 'assets/cards/cyan.png', 'lightning',3);
+    this.gui.addPlayer1Card('cyan_card4', 'assets/cards/cyan.png', 'lightning',4);
+    this.gui.addPlayer1Card('cyan_card5', 'assets/cards/cyan.png', 'lightning',5);
+    this.gui.addPlayer2Card('yellow_card', 'assets/cards/yellow.png', 'lightning', 10);
     this.gui.addMonster('monster1', 'assets/cards/monster.png', 'energyBall', 15);
     this.gui.addMonster('monster2', 'assets/cards/monster.png', 'energyBall', 30);
     this.gui.addOpponentMonster('monster3', 'assets/cards/monster.png', 'energyBall', 30);
@@ -242,9 +248,9 @@ GUI.prototype.play = function() {
  * @arg {string} attackType Defines attack animation
  * @returns {@link Card} Item being added, false otherwise
  */
-GUI.prototype.addPlayer1Card = function(id, imageUrl, attackType) {
+GUI.prototype.addPlayer1Card = function(id, imageUrl, attackType, price) {
     if (game.state.current === 'play') {
-        return game.state.getCurrentState().player1Deck.addItem(id, imageUrl, attackType);
+        return game.state.getCurrentState().player1Deck.addItem(id, imageUrl, attackType, price);
     } else {
         return false;
     }
@@ -258,9 +264,9 @@ GUI.prototype.addPlayer1Card = function(id, imageUrl, attackType) {
  * @arg {string} attackType Defines attack animation
  * @returns {@link Card} Item being added, false otherwise
  */
-GUI.prototype.addPlayer2Card = function(id, imageUrl, attackType) {
+GUI.prototype.addPlayer2Card = function(id, imageUrl, attackType, price) {
     if (game.state.current === 'play') {
-        return game.state.getCurrentState().player2Deck.addItem(id, imageUrl, attackType);
+        return game.state.getCurrentState().player2Deck.addItem(id, imageUrl, attackType, price);
     } else {
         return false;
     }

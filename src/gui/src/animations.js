@@ -86,5 +86,15 @@ var Animations = {
         }
 
         return tween1.start();
+    },
+
+    spawn: function(card) {
+        //card.sprite.visible = false;
+        var sparks = game.add.emitter(card.sprite.x, card.sprite.y, 10);
+        sparks.gravity = 0;
+        sparks.setAlpha(1, 0, 2000);
+        sparks.setScale(0.1, 0.3, 0.1, 0.3);
+        sparks.makeParticles('spark', null, 10);
+        sparks.start(true, 1000, null, 10);
     }
 };

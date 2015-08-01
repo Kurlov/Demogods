@@ -40,7 +40,7 @@ function PlayingElement(id, imageUrl, x, y, attackType) {
     this._prevX = null;
     this._prevY = null;
 
-    attackSignal.add(this.checkIntersections, this);
+
 }
 PlayingElement.prototype.loadSprite = function() {
     this.sprite.loadTexture(this.imageUrl);
@@ -155,20 +155,43 @@ PlayingElement.prototype.onIntersection = function(target) {
  * @arg {string} imageUrl Link to a image which will be shown ingame
  * @arg {number} x Coordinate on x-axis
  * @arg {number} y Coordinate on y-axis
+ * @arg {number} price Price of card
  * @extends PlayingElement
  */ 
-function Card(id, imageUrl, x, y) {
+function Card(id, imageUrl, x, y, price) {
     PlayingElement.apply(this, arguments);
     this.sprite.inputEnabled = true;
     this.sprite.input.enableDrag();
+
+    var priceStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#ffffff'};
+    this.price = game.add.text(this.sprite.x, this.sprite.y, '0', priceStyle);
 }
 
 Card.prototype = Object.create(PlayingElement.prototype);
 Card.prototype.constructor = PlayingElement;
 
 Card.prototype.destroy = function() {
-    attackSignal.remove(this.checkIntersections, this);
+    spawnSignal.remove(this.checkIntersections, this);
     this.sprite.destroy();
+    this.price.destroy();
+};
+
+Card.prototype.onDragStop = function() {
+    spawnSignal.dispatch(this);
+};
+
+Card.prototype.spawn = function() {
+    Animations['spawn'](this);
+    cardDeathSignal.dispatch(this);
+};
+
+Card.prototype.setPrice = function (price) {
+    this.price.text = price;
+};
+
+Card.prototype.update = function() {
+    this.price.x = this.sprite.x;
+    this.price.y = this.sprite.y;
 };
 
 
@@ -189,6 +212,7 @@ function Monster(id, imageUrl, x, y) {
 
     var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#ffffff'};
     this.health = game.add.text(this.sprite.x, this.sprite.y, '0', healthStyle);
+    attackSignal.add(this.checkIntersections, this);
     onSpawn.dispatch();
 }
 
