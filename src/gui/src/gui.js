@@ -197,6 +197,8 @@ states.play.prototype.populate = function() {
     this.gui.addPlayer2Card('yellow_card', 'assets/cards/yellow.png', 'lightning');
     this.gui.addMonster('monster1', 'assets/cards/monster.png', 'energyBall', 15);
     this.gui.addMonster('monster2', 'assets/cards/monster.png', 'energyBall', 30);
+    this.gui.addOpponentMonster('monster3', 'assets/cards/monster.png', 'energyBall', 30);
+    this.gui.addOpponentMonster('monster4', 'assets/cards/monster.png', 'energyBall', 55);
 };
 
 
@@ -280,6 +282,24 @@ GUI.prototype.addMonster = function(id, imageUrl, attackType, health) {
         return false;
     }
 };
+
+/**
+ * @method GUI#addOpponentMonster
+ * @desc Adds monster to the playing table
+ * @arg {string} id Unique id of the {@link Card}
+ * @arg {string} imageUrl URL to an image, which will be shown ingame
+ * @arg {string} attackType Defines attack animation
+ * @arg {number} health Monster's health
+ * @returns {@link Monster} Item being added, false otherwise
+ */
+GUI.prototype.addOpponentMonster = function(id, imageUrl, attackType, health) {
+    if (game.state.current === 'play') {
+        return game.state.getCurrentState().playingTable.addOpponentItem(id, imageUrl, attackType, health);
+    } else {
+        return false;
+    }
+};
+
 /**
  * @method GUI#deletePlayer1Card
  * @desc Deletes card from the first player's deck

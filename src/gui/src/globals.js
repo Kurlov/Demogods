@@ -29,6 +29,15 @@ var attackSignal = new Phaser.Signal();
 
 /**
  * @global
+ * @desc Signal for intersection check for {@link Card}
+ * @private
+ * @type {Phaser.Signal}
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
+ */
+var spawnSignal = new Phaser.Signal();
+
+/**
+ * @global
  * @desc Signal dispatched when {@link PlayingElement} attack happens
  * @type {Phaser.Signal}
  * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}

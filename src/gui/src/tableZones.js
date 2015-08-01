@@ -49,7 +49,7 @@ TableZone.prototype.addItem = function (id, imageUrl, attackType) {
     //activeElements.push(item);
 };
 /**
-  *    @method TableZone#deleteItem
+  * @method TableZone#deleteItem
   * @desc Deletes item from the TableZone
   * @arg {string} id Id of element being deleted
   * @returns {boolean} Returns true if successful
@@ -81,6 +81,18 @@ TableZone.prototype.getItemIndex = function (id) {
     }
     return index;
 };
+
+TableZone.prototype.getOpponentItemIndex = function (id) {
+    var index = -1;
+    for (var i = 0; i < this.opponentItems.length; i++) {
+        if (this.opponentItems[i].id === id) {
+            index = i;
+            break;
+        }
+    }
+    return index;
+};
+
 /**
  * @method TableZone#getItem
  * @desc Finds item by it's id in items array
@@ -202,7 +214,7 @@ PlayingArea.prototype.addItem = function (id, imageUrl, attackType, health) {
  * @returns {Monster} Element being added
  */
 PlayingArea.prototype.addOpponentItem = function (id, imageUrl, attackType, health) {
-    var item = new Monster(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 4), attackType);
+    var item = new Monster(id, imageUrl, this.elementWidth * this.opponentItems.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 2), attackType);
     item.setHealth(health);
     this.opponentItems.push(item);
     return item;
@@ -216,5 +228,25 @@ PlayingArea.prototype.update = function() {
     for (var i = 0; i < this.items.length; i++) {
         this.items[i].update();
     }
+    for (i = 0; i < this.opponentItems.length; i++) {
+        this.items[i].update();
+    }
 };
 
+
+/**
+ * @method PlayingArea#deleteOpponentItem
+ * @desc Deletes opponnet's item from the TableZone
+ * @arg {string} id Id of element being deleted
+ * @returns {boolean} Returns true if successful
+ */
+PlayingArea.prototype.deleteOpponentItem = function(id) {
+    var index = this.getOpponentItemIndex(id);
+    if (index != -1) {
+        this.opponentItems[index].destroy();
+        this.opponentItems.splice(index, 1);
+        return true;
+    } else {
+        return false;
+    }
+};
