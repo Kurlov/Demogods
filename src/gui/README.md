@@ -28,6 +28,17 @@
 ### lobby state:
 * `setMyName(name)` - set displayed username
 * `setOponnetnsName(name)` - set displayed opponents name
+
+### Callbacks:
+* Callbacks are set via Phaser.Signal, which is Phaser's internal event bus implementation.
+* For docs see [here](http://phaser.io/docs/2.4.2/Phaser.Signal.html)
+* Signal variables are in **globals.js** for now 
+
+Defined events:
+
+* `onAttack`
+* `onSpawn`
+* `onDeath`
   
 Example can be seen in **main.js** file;
 API is obviously not complete, so place your feature request right on scrum table in "ToDo" section.  
