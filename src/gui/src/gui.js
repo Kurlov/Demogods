@@ -13,10 +13,11 @@ var states = {};
 
 
 /**
-  * @class
-  * @classDesc State class, represents main menu state
-  * @implements Phaser.State
-  */
+ * @class
+ * @classDesc State class, represents main menu state
+ * @implements Phaser.State
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.State.html}
+ */
 states.mainMenu = function(gui) {
     this.logo = null;
     this.playButton = null;
@@ -39,9 +40,10 @@ states.mainMenu.prototype.create = function() {
 };
 
 /**
-  * @method states.mainMenu#goPlay
-  * @desc starts a playing state
-  */
+ * @method states.mainMenu#goPlay
+ * @desc starts a playing state
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.State.html}
+ */
 states.mainMenu.prototype.goPlay = function() {
     game.state.start('play');
 
@@ -57,6 +59,7 @@ states.mainMenu.prototype.goLobby = function() {
  * @class
  * @classDesc State class, represents lobby state
  * @implements Phaser.State
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.State.html}
  */
 states.lobby = function() {
     this.playButton = null;
@@ -129,6 +132,7 @@ states.lobby.prototype.setOpponentsName = function(name) {
  * @classDesc State class, represents playing game state
  * @arg {GUI} Main GUI object
  * @implements Phaser.State
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.State.html}
  */
 states.play = function(gui) {
     this.monster1 = null;
@@ -225,6 +229,7 @@ GUI.prototype.showMainMenu = function() {
   */
 GUI.prototype.play = function() {
     game.state.start('play');
+
 };
 
 /**
@@ -239,7 +244,6 @@ GUI.prototype.addPlayer1Card = function(id, imageUrl) {
         return game.state.getCurrentState().player1Deck.addItem(id, imageUrl);
     } else {
         return false;
-
     }
 };
 

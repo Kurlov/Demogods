@@ -21,6 +21,7 @@ var TABLE_ZONES = 6; //weirdly big number, actual is 5
 /**
  * @global
  * @desc Signal for intersection check for {@link PlayingElement}
+ * @private
  * @type {Phaser.Signal}
  */
 var attackSignal = new Phaser.Signal();
