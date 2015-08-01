@@ -171,6 +171,8 @@ function PlayingArea(backgroundImage, x, y) {
     this.y = this.sprite.y;
     this.sprite.width = VIEWPORT_W;
     this.sprite.height = 0.66 * VIEWPORT_H;
+    
+    this.opponentItems = [];
 }
 
 PlayingArea.prototype = Object.create(TableZone.prototype);
@@ -191,6 +193,20 @@ PlayingArea.prototype.addItem = function (id, imageUrl, attackType, health) {
     return item;
 };
 
+/**
+ * @method PlayerDeck#addopponentItem
+ * @desc Adds {@link Monster} to player's deck
+ * @arg {string} id Unique element id
+ * @arg {string} imageUrl URL of an image, which will be shown ingame
+ * @arg {string} attackType Defines attack animation
+ * @returns {Monster} Element being added
+ */
+PlayingArea.prototype.addOpponentItem = function (id, imageUrl, attackType, health) {
+    var item = new Monster(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 4), attackType);
+    item.setHealth(health);
+    this.opponentItems.push(item);
+    return item;
+};
 
 /**
   * @method PlayingArea#update

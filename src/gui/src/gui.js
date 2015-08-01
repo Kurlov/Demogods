@@ -119,11 +119,11 @@ states.lobby.prototype.setMyName = function(name) {
 };
 
 /**
- * @method states.lobby#setOpponentsName
+ * @method states.lobby#setOpponentName
  * @desc sets opponent's name, which is displayed
  * @arg {string} name Opponent's name
  */
-states.lobby.prototype.setOpponentsName = function(name) {
+states.lobby.prototype.setOpponentName = function(name) {
     this.opponentName.text = name;
 };
 
@@ -441,12 +441,12 @@ GUI.prototype.setMyName = function(name) {
 };
 
 /**
- * @method GUI#setOpponentsName
+ * @method GUI#setOpponentName
  * @desc Sets user's name in lobby screen
  * @param {string} name Name of opponent
  */
-GUI.prototype.setOpponentsName = function(name) {
+GUI.prototype.setOpponentName = function(name) {
     if (game.state.current == 'lobby') {
-        game.state.getCurrentState().setOpponentsName(name);
+        game.state.getCurrentState().setOpponentName(name);
     }
 };
