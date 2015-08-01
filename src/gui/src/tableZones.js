@@ -148,7 +148,7 @@ PlayerDeck.prototype.constructor = TableZone;
   * @returns {Card} Element being added
   */
 PlayerDeck.prototype.addItem = function (id, imageUrl) {
-    var item = new Card(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 2));
+    var item = new Card(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 2), 'energyBall');
     this.items.push(item);
     return item;
     //activeElements.push(item);
@@ -182,7 +182,7 @@ PlayingArea.prototype.constructor = TableZone;
   * @returns {Monster} Element being added
   */
 PlayingArea.prototype.addItem = function (id, imageUrl, health) {
-    var item = new Monster(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 4));
+    var item = new Monster(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 4), 'lightning');
     item.setHealth(health);
     this.items.push(item);
     return item;

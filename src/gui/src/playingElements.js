@@ -1,9 +1,10 @@
 /**
-  * @file Contains Playing element class and its children. Responsible for cards, players and monsters logics and render on the table.
-  * @author Petrov Alexnader exesa@yandex.ru
-  * @requires Phaser.js
-  * @requires globals.js
-  */
+ * @file Contains Playing element class and its children. Responsible for cards, players and monsters logics and render on the table.
+ * @author Petrov Alexnader exesa@yandex.ru
+ * @requires Phaser.js
+ * @requires globals.js
+ * @requires animations.js
+ */
 
 
 
@@ -14,8 +15,9 @@
  * @arg {string} imageUrl Link to a image which will be shown ingame
  * @arg {number} x Coordinate on x-axis
  * @arg {number} y Coordinate on y-axis
+ * @arg {string} attackType Defines animation, used during attack action
  */
-function PlayingElement(id, imageUrl, x, y) {
+function PlayingElement(id, imageUrl, x, y, attackType) {
     this.id = id;
     this.imageUrl = imageUrl;
     this.sprite = game.add.image(x, y, this.imageUrl);
@@ -27,6 +29,8 @@ function PlayingElement(id, imageUrl, x, y) {
 
 
     this.sprite.anchor = new Phaser.Point(0.5, 0.5);
+
+    this.attackType = attackType;
 
     this.sprite.events.onDragStart.add(this.savePosition, this);
     this.sprite.events.onDragStop.add(this.onDragStop, this);
@@ -91,93 +95,7 @@ PlayingElement.prototype.destroy = function() {
   * @returns {Phaser.Tween} Tween being played
   */
 PlayingElement.prototype.attack = function(target) {
-    var energyBall = game.add.image(this.sprite.x, this.sprite.y, 'energy_ball');
-    energyBall.anchor = new Phaser.Point(0.5, 0.5);
-    var tween = game.add.tween(energyBall);
-    function d() {
-        energyBall.destroy();
-    }
-    tween.to( { x: target.sprite.x, y: target.sprite.y }, 400);
-    
-    tween.onComplete.add(d);
-    return tween.start();
-};
-
-/** @method PlayingElement#attack2
- * @desc Plays another attack animation
- * @arg {PlayingElement} target Object being attacked
- * @returns {Phaser.Tween} Tween being played
- */
-PlayingElement.prototype.attack2 = function(target) {
-    var lightning1 = game.add.rope(0, 0, 'lightning1', null, [new Phaser.Point(this.sprite.x, this.sprite.y), new Phaser.Point(target.sprite.x, target.sprite.y)]);
-    var lightning2 = game.add.rope(0, 0, 'lightning2', null, [new Phaser.Point(this.sprite.x, this.sprite.y), new Phaser.Point(target.sprite.x, target.sprite.y)]);
-    var lightning3 = game.add.rope(0, 0, 'lightning3', null, [new Phaser.Point(this.sprite.x, this.sprite.y), new Phaser.Point(target.sprite.x, target.sprite.y)]);
-    var lightning4 = game.add.rope(0, 0, 'lightning4', null, [new Phaser.Point(this.sprite.x, this.sprite.y), new Phaser.Point(target.sprite.x, target.sprite.y)]);
-
-    lightning1.bringToTop();
-    lightning2.bringToTop();
-    lightning3.bringToTop();
-    lightning4.bringToTop();
-
-    var tween1 = game.add.tween(lightning1);
-    var tween2 = game.add.tween(lightning2);
-    var tween3 = game.add.tween(lightning3);
-    var tween4 = game.add.tween(lightning4);
-
-    tween1.to( {x: 0, y: 0 }, 50);
-    tween1.onComplete.add(tw1);
-    tween2.to( {x: 0, y: 0 }, 50);
-    tween2.onComplete.add(tw2);
-    tween3.to( {x: 0, y: 0 }, 50);
-    tween3.onComplete.add(tw3);
-    tween4.to( {x: 0, y: 0 }, 50);
-    tween4.onComplete.add(tw4);
-
-    var smoke = game.add.emitter(target.sprite.x, target.sprite.y, 50);
-    smoke.gravity = -400;
-    smoke.setAlpha(1, 0, 1600);
-    smoke.makeParticles('smoke', null, 50);
-
-    var sparks = game.add.emitter(target.sprite.x, target.sprite.y, 10);
-    sparks.gravity = 100;
-    sparks.setAlpha(1, 0, 2000);
-    sparks.setScale(0.1, 0.3, 0.1, 0.3);
-    sparks.makeParticles('spark', null, 10);
-
-    function tw1() {
-        lightning1.destroy();
-        lightning2.bringToTop();
-        tween2.start();
-        smoke.start(true, 800, null, 50);
-        sparks.start(true, 1000, null, 10);
-    }
-    function tw2() {
-        lightning2.destroy();
-        lightning3.bringToTop();
-        tween3.start();
-        smoke.start(true, 800, null, 50);
-        sparks.start(true, 1000, null, 10);
-    }
-    function tw3() {
-        lightning3.destroy();
-        lightning4.bringToTop();
-        tween4.start();
-        smoke.start(true, 800, null, 50);
-        sparks.start(true, 1000, null, 10);
-    }
-    function tw4() {
-        lightning4.destroy();
-        stop();
-        smoke.start(true, 800, null, 50);
-        sparks.start(true, 1000, null, 10);
-    }
-    function stop() {
-        smoke.start(true, 800, null, 50);
-        sparks.start(true, 1000, null, 10);
-        sparks.start(true, 1000, null, 10);
-    }
-
-    return tween1.start();
+    Animations[this.attackType](this, target);
 };
 
 /** @method PlayingElement#getBounds
@@ -227,7 +145,7 @@ PlayingElement.prototype.checkIntersections = function(attacker) {
   */
 PlayingElement.prototype.onIntersection = function(target) {
     this.restorePosition();
-    this.attack2(target);
+    this.attack(target);
 };
 
 /**
