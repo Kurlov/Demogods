@@ -35,14 +35,15 @@ TableZone.prototype.fitToScreen = function () {
 };
 
 /**
-  * @method TableZone#addItem
-  * @desc Adds new {@link PlayingElement} to TableZone
-  * @arg {string} id Unique element id
-  * @arg {string} imageUrl URL of an image, whil will be shown ingame
-  * @returns {PlayingElement} Element being added
-  */
-TableZone.prototype.addItem = function (id, imageUrl) {
-    var item = new PlayingElement(id, imageUrl, this.elementWidth * this.items.length, this.y);
+ * @method TableZone#addItem
+ * @desc Adds new {@link PlayingElement} to TableZone
+ * @arg {string} id Unique element id
+ * @arg {string} imageUrl URL of an image, whil will be shown ingame
+ * @arg {string} attackType Defines attack animation
+ * @returns {PlayingElement} Element being added
+ */
+TableZone.prototype.addItem = function (id, imageUrl, attackType) {
+    var item = new PlayingElement(id, imageUrl, this.elementWidth * this.items.length, this.y, attackType);
     this.items.push(item);
     return item;
     //activeElements.push(item);
@@ -141,14 +142,15 @@ PlayerDeck.prototype = Object.create(TableZone.prototype);
 PlayerDeck.prototype.constructor = TableZone;
 
 /**
-  * @method PlayerDeck#addItem
-  * @desc Adds {@link Card} to player's deck
-  * @arg {string} id Unique element id
-  * @arg {string} imageUrl URL of an image, whil will be shown ingame
-  * @returns {Card} Element being added
-  */
-PlayerDeck.prototype.addItem = function (id, imageUrl) {
-    var item = new Card(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 2), 'energyBall');
+ * @method PlayerDeck#addItem
+ * @desc Adds {@link Card} to player's deck
+ * @arg {string} id Unique element id
+ * @arg {string} imageUrl URL of an image, whil will be shown ingame
+ * @arg {string} attackType Defines attack animation
+ * @returns {Card} Element being added
+ */
+PlayerDeck.prototype.addItem = function (id, imageUrl, attackType) {
+    var item = new Card(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 2), attackType);
     this.items.push(item);
     return item;
     //activeElements.push(item);
@@ -175,14 +177,15 @@ PlayingArea.prototype = Object.create(TableZone.prototype);
 PlayingArea.prototype.constructor = TableZone;
 
 /**
-  * @method PlayerDeck#addItem
-  * @desc Adds {@link Monster} to player's deck
-  * @arg {string} id Unique element id
-  * @arg {string} imageUrl URL of an image, which will be shown ingame
-  * @returns {Monster} Element being added
+ * @method PlayerDeck#addItem
+ * @desc Adds {@link Monster} to player's deck
+ * @arg {string} id Unique element id
+ * @arg {string} imageUrl URL of an image, which will be shown ingame
+ * @arg {string} attackType Defines attack animation
+ * @returns {Monster} Element being added
   */
-PlayingArea.prototype.addItem = function (id, imageUrl, health) {
-    var item = new Monster(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 4), 'lightning');
+PlayingArea.prototype.addItem = function (id, imageUrl, attackType, health) {
+    var item = new Monster(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 4), attackType);
     item.setHealth(health);
     this.items.push(item);
     return item;
