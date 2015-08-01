@@ -195,16 +195,16 @@ states.play.prototype.update = function() {
 states.play.prototype.populate = function() {
     this.gui.setPlayer1Health(20);
     this.gui.setPlayer2Health(30);
-    this.gui.addPlayer1Card('cyan_card1', 'assets/cards/cyan.png', 'lightning',1);
-    this.gui.addPlayer1Card('cyan_card2', 'assets/cards/cyan.png', 'lightning',2);
-    this.gui.addPlayer1Card('cyan_card3', 'assets/cards/cyan.png', 'lightning',3);
-    this.gui.addPlayer1Card('cyan_card4', 'assets/cards/cyan.png', 'lightning',4);
-    this.gui.addPlayer1Card('cyan_card5', 'assets/cards/cyan.png', 'lightning',5);
-    this.gui.addPlayer2Card('yellow_card', 'assets/cards/yellow.png', 'lightning', 10);
-    this.gui.addMonster('monster1', 'assets/cards/monster.png', 'energyBall', 15);
-    this.gui.addMonster('monster2', 'assets/cards/monster.png', 'energyBall', 30);
-    this.gui.addOpponentMonster('monster3', 'assets/cards/monster.png', 'energyBall', 30);
-    this.gui.addOpponentMonster('monster4', 'assets/cards/monster.png', 'energyBall', 55);
+    this.gui.addPlayer1Card('cyan_card1', 'assets/cards/cyan.png', 'lightning',1, 2 ,3);
+    this.gui.addPlayer1Card('cyan_card2', 'assets/cards/cyan.png', 'lightning',2, 2, 3);
+    this.gui.addPlayer1Card('cyan_card3', 'assets/cards/cyan.png', 'lightning',3, 2, 3);
+    this.gui.addPlayer1Card('cyan_card4', 'assets/cards/cyan.png', 'lightning',4, 2, 3);
+    this.gui.addPlayer1Card('cyan_card5', 'assets/cards/cyan.png', 'lightning',5, 2, 3);
+    this.gui.addPlayer2Card('yellow_card', 'assets/cards/yellow.png', 'lightning', 10, 2, 3);
+    this.gui.addMonster('monster1', 'assets/cards/monster.png', 'energyBall', 15, 3);
+    this.gui.addMonster('monster2', 'assets/cards/monster.png', 'energyBall', 30, 3);
+    this.gui.addOpponentMonster('monster3', 'assets/cards/monster.png', 'energyBall', 30, 4);
+    this.gui.addOpponentMonster('monster4', 'assets/cards/monster.png', 'energyBall', 55, 4);
 };
 
 
@@ -246,11 +246,14 @@ GUI.prototype.play = function() {
  * @arg {string} id Unique id of the {@link Card}
  * @arg {string} imageUrl URL to an image, whick will be shown ingame
  * @arg {string} attackType Defines attack animation
+ * @arg {number} price Mana points necessary to use a card
+ * @arg {number} attackLevel Damage done by creature spawned by this card
+ * @arg {number} health Health points of creature done spawned by this card
  * @returns {@link Card} Item being added, false otherwise
  */
-GUI.prototype.addPlayer1Card = function(id, imageUrl, attackType, price) {
+GUI.prototype.addPlayer1Card = function(id, imageUrl, attackType, price, attackLevel, health) {
     if (game.state.current === 'play') {
-        return game.state.getCurrentState().player1Deck.addItem(id, imageUrl, attackType, price);
+        return game.state.getCurrentState().player1Deck.addItem(id, imageUrl, attackType, price, attackLevel, health);
     } else {
         return false;
     }
@@ -262,11 +265,14 @@ GUI.prototype.addPlayer1Card = function(id, imageUrl, attackType, price) {
  * @arg {string} id Unique id of the {@link Card}
  * @arg {string} imageUrl URL to an image, which will be shown ingame
  * @arg {string} attackType Defines attack animation
+ * @arg {number} price Mana points necessary to use a card
+ * @arg {number} attackLevel Damage done by creature spawned by this card
+ * @arg {number} health Health points of creature done spawned by this card
  * @returns {@link Card} Item being added, false otherwise
  */
-GUI.prototype.addPlayer2Card = function(id, imageUrl, attackType, price) {
+GUI.prototype.addPlayer2Card = function(id, imageUrl, attackType, price, attackLevel, health) {
     if (game.state.current === 'play') {
-        return game.state.getCurrentState().player2Deck.addItem(id, imageUrl, attackType, price);
+        return game.state.getCurrentState().player2Deck.addItem(id, imageUrl, attackType, price, attackLevel, health);
     } else {
         return false;
     }
@@ -279,11 +285,12 @@ GUI.prototype.addPlayer2Card = function(id, imageUrl, attackType, price) {
  * @arg {string} imageUrl URL to an image, which will be shown ingame
  * @arg {string} attackType Defines attack animation
  * @arg {number} health Monster's health
+ * @arg {number} attackLevel Monster's attack points
  * @returns {@link Monster} Item being added, false otherwise
  */
-GUI.prototype.addMonster = function(id, imageUrl, attackType, health) {
+GUI.prototype.addMonster = function(id, imageUrl, attackType, health, attackLevel) {
     if (game.state.current === 'play') {
-        return game.state.getCurrentState().playingTable.addItem(id, imageUrl, attackType, health);
+        return game.state.getCurrentState().playingTable.addItem(id, imageUrl, attackType, health, attackLevel);
     } else {
         return false;
     }
@@ -296,11 +303,12 @@ GUI.prototype.addMonster = function(id, imageUrl, attackType, health) {
  * @arg {string} imageUrl URL to an image, which will be shown ingame
  * @arg {string} attackType Defines attack animation
  * @arg {number} health Monster's health
+ * @arg {number} attackLevel Monster's attack points
  * @returns {@link Monster} Item being added, false otherwise
  */
-GUI.prototype.addOpponentMonster = function(id, imageUrl, attackType, health) {
+GUI.prototype.addOpponentMonster = function(id, imageUrl, attackType, health, attackLevel) {
     if (game.state.current === 'play') {
-        return game.state.getCurrentState().playingTable.addOpponentItem(id, imageUrl, attackType, health);
+        return game.state.getCurrentState().playingTable.addOpponentItem(id, imageUrl, attackType, health, attackLevel);
     } else {
         return false;
     }

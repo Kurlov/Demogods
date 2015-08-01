@@ -137,7 +137,7 @@
 
     
 
-    <h4 class="name" id="addMonster"><span class="type-signature"></span>addMonster<span class="signature">(id, imageUrl, attackType, health)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="addMonster"><span class="type-signature"></span>addMonster<span class="signature">(id, imageUrl, attackType, health, attackLevel)</span><span class="type-signature"></span></h4>
 
     
 
@@ -269,6 +269,29 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>attackLevel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Monster's attack points</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -342,7 +365,235 @@
 
     
 
-    <h4 class="name" id="addPlayer1Card"><span class="type-signature"></span>addPlayer1Card<span class="signature">(id, imageUrl, attackType)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="addOpponentMonster"><span class="type-signature"></span>addOpponentMonster<span class="signature">(id, imageUrl, attackType, health, attackLevel)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Adds monster to the playing table
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Unique id of the <a href="Card.html"><code>Card</code></a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>imageUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">URL to an image, which will be shown ingame</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attackType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Defines attack animation</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>health</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Monster's health</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attackLevel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Monster's attack points</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <a href="Monster.html"><code>Monster</code></a> Item being added, false otherwise
+</div>
+
+
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="addPlayer1Card"><span class="type-signature"></span>addPlayer1Card<span class="signature">(id, imageUrl, attackType, price, attackLevel, health)</span><span class="type-signature"></span></h4>
 
     
 
@@ -451,6 +702,75 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>price</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Mana points necessary to use a card</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attackLevel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Damage done by creature spawned by this card</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>health</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Health points of creature done spawned by this card</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -524,7 +844,7 @@
 
     
 
-    <h4 class="name" id="addPlayer2Card"><span class="type-signature"></span>addPlayer2Card<span class="signature">(id, imageUrl, attackType)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="addPlayer2Card"><span class="type-signature"></span>addPlayer2Card<span class="signature">(id, imageUrl, attackType, price, attackLevel, health)</span><span class="type-signature"></span></h4>
 
     
 
@@ -630,6 +950,75 @@
             
 
             <td class="description last">Defines attack animation</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>price</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Mana points necessary to use a card</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attackLevel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Damage done by creature spawned by this card</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>health</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Health points of creature done spawned by this card</td>
         </tr>
 
     
@@ -1952,7 +2341,7 @@
 
     
 
-    <h4 class="name" id="setOpponentsName"><span class="type-signature"></span>setOpponentsName<span class="signature">(name)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setOpponentName"><span class="type-signature"></span>setOpponentName<span class="signature">(name)</span><span class="type-signature"></span></h4>
 
     
 
@@ -2462,13 +2851,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="GUI.html">GUI</a></li><li><a href="Monster.html">Monster</a></li><li><a href="Phaser.Plugin.Debug.html">Debug</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerDeck.html">PlayerDeck</a></li><li><a href="PlayingArea.html">PlayingArea</a></li><li><a href="PlayingElement.html">PlayingElement</a></li><li><a href="states.lobby.html">lobby</a></li><li><a href="states.mainMenu.html">mainMenu</a></li><li><a href="states.play.html">play</a></li><li><a href="TableZone.html">TableZone</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Animations">Animations</a></li><li><a href="global.html#dynamicImageLoad">dynamicImageLoad</a></li><li><a href="global.html#onAttack">onAttack</a></li><li><a href="global.html#onDeath">onDeath</a></li><li><a href="global.html#onSpawn">onSpawn</a></li><li><a href="global.html#TABLE_ZONES">TABLE_ZONES</a></li><li><a href="global.html#VIEWPORT_H">VIEWPORT_H</a></li><li><a href="global.html#VIEWPORT_W">VIEWPORT_W</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="GUI.html">GUI</a></li><li><a href="Monster.html">Monster</a></li><li><a href="Phaser.Plugin.Debug.html">Debug</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerDeck.html">PlayerDeck</a></li><li><a href="PlayingArea.html">PlayingArea</a></li><li><a href="PlayingElement.html">PlayingElement</a></li><li><a href="states.lobby.html">lobby</a></li><li><a href="states.mainMenu.html">mainMenu</a></li><li><a href="states.play.html">play</a></li><li><a href="TableZone.html">TableZone</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Animations">Animations</a></li><li><a href="global.html#attackSignal">attackSignal</a></li><li><a href="global.html#cardDeathSignal">cardDeathSignal</a></li><li><a href="global.html#dynamicImageLoad">dynamicImageLoad</a></li><li><a href="global.html#onAttack">onAttack</a></li><li><a href="global.html#onDeath">onDeath</a></li><li><a href="global.html#onSpawn">onSpawn</a></li><li><a href="global.html#spawnSignal">spawnSignal</a></li><li><a href="global.html#TABLE_ZONES">TABLE_ZONES</a></li><li><a href="global.html#VIEWPORT_H">VIEWPORT_H</a></li><li><a href="global.html#VIEWPORT_W">VIEWPORT_W</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Sat Aug 01 2015 21:47:54 GMT+0500 (GMT+05:00)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Sun Aug 02 2015 02:46:49 GMT+0500 (GMT+05:00)
 </footer>
 
 <script> prettyPrint(); </script>

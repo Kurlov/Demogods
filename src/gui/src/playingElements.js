@@ -164,7 +164,17 @@ function Card(id, imageUrl, x, y, price) {
     this.sprite.input.enableDrag();
 
     var priceStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#ffffff'};
-    this.price = game.add.text(this.sprite.x, this.sprite.y, '0', priceStyle);
+    this.priceText = game.add.text(this.sprite.x, this.sprite.y, '0', priceStyle);
+
+    this.attackLevel = 0;
+    this.health = 0;
+    this.price = 0;
+
+    var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#00ff00'};
+    this.healthText = game.add.text(this.sprite.x, this.sprite.y + 40, '0', healthStyle);
+
+    var attackStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#ff0000'};
+    this.attackText = game.add.text(this.sprite.x, this.sprite.y + 20, '0', attackStyle);
 }
 
 Card.prototype = Object.create(PlayingElement.prototype);
@@ -173,7 +183,9 @@ Card.prototype.constructor = PlayingElement;
 Card.prototype.destroy = function() {
     spawnSignal.remove(this.checkIntersections, this);
     this.sprite.destroy();
-    this.price.destroy();
+    this.priceText.destroy();
+    this.healthText.destroy();
+    this.attackText.destroy();
 };
 
 Card.prototype.onDragStop = function() {
@@ -186,12 +198,29 @@ Card.prototype.spawn = function() {
 };
 
 Card.prototype.setPrice = function (price) {
-    this.price.text = price;
+    this.priceText.text = price;
+    this.price = price;
 };
 
 Card.prototype.update = function() {
-    this.price.x = this.sprite.x;
-    this.price.y = this.sprite.y;
+    this.priceText.x = this.sprite.x;
+    this.priceText.y = this.sprite.y;
+
+    this.attackText.x = this.sprite.x;
+    this.attackText.y = this.sprite.y + 20;
+
+    this.healthText.x = this.sprite.x;
+    this.healthText.y = this.sprite.y + 40;
+};
+
+Card.prototype.setHealth = function(health) {
+    this.healthText.text = health;
+    this.health = health;
+};
+
+Card.prototype.setAttack = function(attack) {
+    this.attackText.text = attack;
+    this.attackLevel = attack;
 };
 
 
@@ -209,9 +238,15 @@ function Monster(id, imageUrl, x, y) {
     this.sprite.inputEnabled = true;
     this.sprite.input.enableDrag();
 
+    this.attackLevel = 0;
+    this.health = 0;
 
-    var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#ffffff'};
-    this.health = game.add.text(this.sprite.x, this.sprite.y, '0', healthStyle);
+    var healthStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#00ff00'};
+    this.healthText = game.add.text(this.sprite.x, this.sprite.y, '0', healthStyle);
+
+    var attackStyle = { font: String(Math.floor(this.sprite.height / 5)) + 'px Arial', fill: '#ff0000'};
+    this.attackText = game.add.text(this.sprite.x, this.sprite.y + 20, '0', attackStyle);
+
     attackSignal.add(this.checkIntersections, this);
     onSpawn.dispatch();
 }
@@ -225,7 +260,13 @@ Monster.prototype.constructor = PlayingElement;
   * @arg {number} Health level
   */
 Monster.prototype.setHealth = function(health) {
-    this.health.text = health;
+    this.healthText.text = health;
+    this.health = health;
+};
+
+Monster.prototype.setAttack = function(attack) {
+    this.attackText.text = attack;
+    this.attackLevel = attack;
 };
 
 Monster.prototype.destroy = function() {
@@ -241,8 +282,10 @@ Monster.prototype.destroy = function() {
   * @desc Redraws monster on call. Must be called on global update.
   */
 Monster.prototype.update = function() {
-    this.health.x = this.sprite.x;
-    this.health.y = this.sprite.y;
+    this.healthText.x = this.sprite.x;
+    this.healthText.y = this.sprite.y;
+    this.attackText.x = this.sprite.x;
+    this.attackText.y = this.sprite.y + 20;
 };
 
 /**

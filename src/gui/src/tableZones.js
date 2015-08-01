@@ -153,9 +153,11 @@ PlayerDeck.prototype.constructor = TableZone;
  * @arg {string} attackType Defines attack animation
  * @returns {Card} Element being added
  */
-PlayerDeck.prototype.addItem = function (id, imageUrl, attackType, price) {
+PlayerDeck.prototype.addItem = function (id, imageUrl, attackType, price, attackLevel, health) {
     var item = new Card(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 2), attackType);
     item.setPrice(price);
+    item.setAttack(attackLevel);
+    item.setHealth(health);
     this.items.push(item);
     return item;
 };
@@ -201,11 +203,13 @@ PlayingArea.prototype.constructor = TableZone;
  * @arg {string} id Unique element id
  * @arg {string} imageUrl URL of an image, which will be shown ingame
  * @arg {string} attackType Defines attack animation
+ * @arg {number} attackLevel Attack points
  * @returns {Monster} Element being added
  */
-PlayingArea.prototype.addItem = function (id, imageUrl, attackType, health) {
+PlayingArea.prototype.addItem = function (id, imageUrl, attackType, health, attackLevel) {
     var item = new Monster(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 4), attackType);
     item.setHealth(health);
+    item.setAttack(attackLevel);
     this.items.push(item);
     return item;
 };
@@ -218,9 +222,10 @@ PlayingArea.prototype.addItem = function (id, imageUrl, attackType, health) {
  * @arg {string} attackType Defines attack animation
  * @returns {Monster} Element being added
  */
-PlayingArea.prototype.addOpponentItem = function (id, imageUrl, attackType, health) {
+PlayingArea.prototype.addOpponentItem = function (id, imageUrl, attackType, health, attackLevel) {
     var item = new Monster(id, imageUrl, this.elementWidth * this.opponentItems.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 2), attackType);
     item.setHealth(health);
+    item.setAttack(attackLevel);
     this.opponentItems.push(item);
     return item;
 };
