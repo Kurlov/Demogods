@@ -180,6 +180,10 @@ function Card(id, imageUrl, x, y, price) {
 Card.prototype = Object.create(PlayingElement.prototype);
 Card.prototype.constructor = PlayingElement;
 
+/** @method Card#destroy
+ * @desc destroys object
+ * @override
+ */
 Card.prototype.destroy = function() {
     spawnSignal.remove(this.checkIntersections, this);
     this.sprite.destroy();
@@ -188,20 +192,38 @@ Card.prototype.destroy = function() {
     this.attackText.destroy();
 };
 
+/**
+ * @method Card#onDragStop
+ * @desc Drag'n'Drop finish handler
+ * @override
+ */
 Card.prototype.onDragStop = function() {
     spawnSignal.dispatch(this);
 };
 
+/**
+ * @method Card#spawn
+ * @desc Perform a spawn action (use a card);
+ */
 Card.prototype.spawn = function() {
     Animations['spawn'](this);
     cardDeathSignal.dispatch(this);
 };
 
+/**
+ * @method Card#setPrice
+ * @desc Set displayed price of the card
+ * @param {number} price Desired price
+ */
 Card.prototype.setPrice = function (price) {
     this.priceText.text = price;
     this.price = price;
 };
 
+/**
+ * @method Card#update
+ * @desc Redraws elements of card. Must be called on Phaser.State.Update()
+ */
 Card.prototype.update = function() {
     this.priceText.x = this.sprite.x;
     this.priceText.y = this.sprite.y;
@@ -213,11 +235,21 @@ Card.prototype.update = function() {
     this.healthText.y = this.sprite.y + 40;
 };
 
+/**
+ * @method Card#setHealth
+ * @desc Set displayed health level
+ * @param {number} health Desired helth level
+ */
 Card.prototype.setHealth = function(health) {
     this.healthText.text = health;
     this.health = health;
 };
 
+/**
+ * @method Card#setAttack
+ * @desc Set displayed attack level
+ * @param {number} attack Desired attack level
+ */
 Card.prototype.setAttack = function(attack) {
     this.attackText.text = attack;
     this.attackLevel = attack;
@@ -257,18 +289,28 @@ Monster.prototype.constructor = PlayingElement;
 /**
   * @method Monster#setHealth
   * @desc Sets health level of this Monster.
-  * @arg {number} Health level
+  * @arg {number} health Desired health level
   */
 Monster.prototype.setHealth = function(health) {
     this.healthText.text = health;
     this.health = health;
 };
 
+/**
+ * @method Monster#setAttack
+ * @desc Set displayed attack level
+ * @param {number} attack Desired attack level
+ */
 Monster.prototype.setAttack = function(attack) {
     this.attackText.text = attack;
     this.attackLevel = attack;
 };
 
+/**
+ * @method Monster#destroy();
+ * @desc Destroys object
+ * @override
+ */
 Monster.prototype.destroy = function() {
     attackSignal.remove(this.checkIntersections, this);
     this.sprite.destroy();
@@ -322,12 +364,17 @@ Player.prototype.constructor = PlayingElement;
 /**
   * @method Player#setHealth
   * @desc Sets health level of this Monster.
-  * @arg {number} Health level
+  * @arg {number} health Desired health level
   */
 Player.prototype.setHealth = function(health) {
     this.health.text = health;
 };
 
+/**
+ * @method Player#destroy
+ * @desc Destroys object
+ * @override
+ */
 Player.prototype.destroy = function() {
     this.sprite.destroy();
     this.health.text = '';

@@ -50,10 +50,12 @@ var cardDeathSignal = new Phaser.Signal();
  * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
  */
 
-
-
-
-
+/**
+ * @global
+ * @desc Signal dispatched when {@link Monster} attacks something
+ * @type {Phaser.Signal}
+ * @see {@link http://phaser.io/docs/2.4.2/Phaser.Signal.html}
+ */
 var onAttack = new Phaser.Signal();
 
 /**
@@ -86,5 +88,5 @@ function dynamicImageLoad(id, imageUrl, item) {
     loader.onLoadComplete.add(function() {item.loadSprite(); item.fitToScreen();});
     loader.start();
     
-    console.log(game.cache.checkImageKey(id));
+    console.log(id);
 }

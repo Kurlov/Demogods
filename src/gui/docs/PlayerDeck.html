@@ -220,14 +220,14 @@
 
     
 
-    <h4 class="name" id="addItem"><span class="type-signature"></span>addItem<span class="signature">(id, imageUrl, attackType)</span><span class="type-signature"> &rarr; {<a href="Card.html">Card</a>}</span></h4>
+    <h4 class="name" id="addItem"><span class="type-signature"></span>addItem<span class="signature">(id, imageUrl, attackType)</span><span class="type-signature"> &rarr; {<a href="PlayingElement.html">PlayingElement</a>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Adds <a href="Card.html"><code>Card</code></a> to player's deck
+    Adds new <a href="PlayingElement.html"><code>PlayingElement</code></a> to TableZone
 </div>
 
 
@@ -404,7 +404,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="PlayingElement.html">PlayingElement</a></span>
 
 
     </dd>
@@ -419,14 +419,14 @@
 
     
 
-    <h4 class="name" id="addItem"><span class="type-signature"></span>addItem<span class="signature">(id, imageUrl, attackType, attackLevel)</span><span class="type-signature"> &rarr; {<a href="Monster.html">Monster</a>}</span></h4>
+    <h4 class="name" id="addOpponentItem"><span class="type-signature"></span>addOpponentItem<span class="signature">(id, imageUrl, attackType, health, attackLevel)</span><span class="type-signature"> &rarr; {<a href="Monster.html">Monster</a>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Adds <a href="Monster.html"><code>Monster</code></a> to player's deck
+    Adds <a href="Monster.html"><code>Monster</code></a> to opponent's deck
 </div>
 
 
@@ -525,6 +525,29 @@
             
 
             <td class="description last">Defines attack animation</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>health</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Health points of <a href="Monster.html"><code>Monster</code></a> being added</td>
         </tr>
 
     
@@ -547,206 +570,7 @@
 
             
 
-            <td class="description last">Attack points</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="TableZone.html#addItem">TableZone#addItem</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Element being added
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Monster.html">Monster</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="addopponentItem"><span class="type-signature"></span>addopponentItem<span class="signature">(id, imageUrl, attackType)</span><span class="type-signature"> &rarr; {<a href="Monster.html">Monster</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Adds <a href="Monster.html"><code>Monster</code></a> to player's deck
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Unique element id</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>imageUrl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">URL of an image, which will be shown ingame</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>attackType</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Defines attack animation</td>
+            <td class="description last">Attack points of <a href="Monster.html"><code>Monster</code></a> being added</td>
         </tr>
 
     
@@ -1608,6 +1432,83 @@
 
 
         
+            
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Calls update method of all card in this deck
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
@@ -1623,13 +1524,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="GUI.html">GUI</a></li><li><a href="Monster.html">Monster</a></li><li><a href="Phaser.Plugin.Debug.html">Debug</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerDeck.html">PlayerDeck</a></li><li><a href="PlayingArea.html">PlayingArea</a></li><li><a href="PlayingElement.html">PlayingElement</a></li><li><a href="states.lobby.html">lobby</a></li><li><a href="states.mainMenu.html">mainMenu</a></li><li><a href="states.play.html">play</a></li><li><a href="TableZone.html">TableZone</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Animations">Animations</a></li><li><a href="global.html#attackSignal">attackSignal</a></li><li><a href="global.html#cardDeathSignal">cardDeathSignal</a></li><li><a href="global.html#dynamicImageLoad">dynamicImageLoad</a></li><li><a href="global.html#onAttack">onAttack</a></li><li><a href="global.html#onDeath">onDeath</a></li><li><a href="global.html#onSpawn">onSpawn</a></li><li><a href="global.html#spawnSignal">spawnSignal</a></li><li><a href="global.html#TABLE_ZONES">TABLE_ZONES</a></li><li><a href="global.html#VIEWPORT_H">VIEWPORT_H</a></li><li><a href="global.html#VIEWPORT_W">VIEWPORT_W</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="GUI.html">GUI</a></li><li><a href="Monster.html">Monster</a></li><li><a href="Phaser.Plugin.Debug.html">Debug</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerDeck.html">PlayerDeck</a></li><li><a href="PlayingArea.html">PlayingArea</a></li><li><a href="PlayingElement.html">PlayingElement</a></li><li><a href="states.lobby.html">lobby</a></li><li><a href="states.mainMenu.html">mainMenu</a></li><li><a href="states.play.html">play</a></li><li><a href="TableZone.html">TableZone</a></li></ul><h3>Namespaces</h3><ul><li><a href="Animations.html">Animations</a></li></ul><h3>Global</h3><ul><li><a href="global.html#attackSignal">attackSignal</a></li><li><a href="global.html#cardDeathSignal">cardDeathSignal</a></li><li><a href="global.html#dynamicImageLoad">dynamicImageLoad</a></li><li><a href="global.html#onAttack">onAttack</a></li><li><a href="global.html#onDeath">onDeath</a></li><li><a href="global.html#onSpawn">onSpawn</a></li><li><a href="global.html#spawnSignal">spawnSignal</a></li><li><a href="global.html#TABLE_ZONES">TABLE_ZONES</a></li><li><a href="global.html#VIEWPORT_H">VIEWPORT_H</a></li><li><a href="global.html#VIEWPORT_W">VIEWPORT_W</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Sun Aug 02 2015 02:46:50 GMT+0500 (GMT+05:00)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Sun Aug 02 2015 22:09:12 GMT+0500 (GMT+05:00)
 </footer>
 
 <script> prettyPrint(); </script>

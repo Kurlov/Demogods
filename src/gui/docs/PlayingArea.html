@@ -46,7 +46,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="PlayingArea"><span class="type-signature"></span>new PlayingArea<span class="signature">(backgroundImage, bottom)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="PlayingArea"><span class="type-signature"></span>new PlayingArea<span class="signature">(backgroundImage, x, y)</span><span class="type-signature"></span></h4>
 
     
 
@@ -108,13 +108,13 @@
 
         <tr>
             
-                <td class="name"><code>bottom</code></td>
+                <td class="name"><code>x</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">number</span>
 
 
             
@@ -124,7 +124,30 @@
 
             
 
-            <td class="description last">Should it be rendered on bottom of the screen?</td>
+            <td class="description last">X coordinate of this area (top-left corner)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Y coordinate of this area (top-left corner)</td>
         </tr>
 
     
@@ -419,6 +442,132 @@
 
     
 
+    <h4 class="name" id="cardHandler"><span class="type-signature"></span>cardHandler<span class="signature">(card)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Card release event handler
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Card.html">Card</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Card Being released</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="deleteItem"><span class="type-signature"></span>deleteItem<span class="signature">(id)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
@@ -579,7 +728,7 @@
 
 
 <div class="description">
-    Deletes opponnet's item from the TableZone
+    Deletes opponent's item from the TableZone
 </div>
 
 
@@ -1108,6 +1257,293 @@
 
     
 
+    <h4 class="name" id="getOpItemIndex"><span class="type-signature"></span>getOpItemIndex<span class="signature">(id)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Finds index of opponent's item by it's id in items array
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Id of element</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns index of item, -1 otherwise
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="hetOpponentItemIndex"><span class="type-signature"></span>hetOpponentItemIndex<span class="signature">(id)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Find index of opponent's <a href="Monster.html"><code>Monster</code></a> by given id
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Id of <a href="Monster.html"><code>Monster</code></a></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="moveToPosition"><span class="type-signature"></span>moveToPosition<span class="signature">(id, position)</span><span class="type-signature"></span></h4>
 
     
@@ -1213,6 +1649,155 @@
     <dd class="inherited-from"><ul class="dummy"><li>
         <a href="TableZone.html#moveToPosition">TableZone#moveToPosition</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="moveToPositionOp"><span class="type-signature"></span>moveToPositionOp<span class="signature">(id, position)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    moves an  opponent's item to a new position
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Id of item being moved</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>position</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">New position of element</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
     
 
     
@@ -1432,13 +2017,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="GUI.html">GUI</a></li><li><a href="Monster.html">Monster</a></li><li><a href="Phaser.Plugin.Debug.html">Debug</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerDeck.html">PlayerDeck</a></li><li><a href="PlayingArea.html">PlayingArea</a></li><li><a href="PlayingElement.html">PlayingElement</a></li><li><a href="states.lobby.html">lobby</a></li><li><a href="states.mainMenu.html">mainMenu</a></li><li><a href="states.play.html">play</a></li><li><a href="TableZone.html">TableZone</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Animations">Animations</a></li><li><a href="global.html#attackSignal">attackSignal</a></li><li><a href="global.html#cardDeathSignal">cardDeathSignal</a></li><li><a href="global.html#dynamicImageLoad">dynamicImageLoad</a></li><li><a href="global.html#onAttack">onAttack</a></li><li><a href="global.html#onDeath">onDeath</a></li><li><a href="global.html#onSpawn">onSpawn</a></li><li><a href="global.html#spawnSignal">spawnSignal</a></li><li><a href="global.html#TABLE_ZONES">TABLE_ZONES</a></li><li><a href="global.html#VIEWPORT_H">VIEWPORT_H</a></li><li><a href="global.html#VIEWPORT_W">VIEWPORT_W</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="GUI.html">GUI</a></li><li><a href="Monster.html">Monster</a></li><li><a href="Phaser.Plugin.Debug.html">Debug</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerDeck.html">PlayerDeck</a></li><li><a href="PlayingArea.html">PlayingArea</a></li><li><a href="PlayingElement.html">PlayingElement</a></li><li><a href="states.lobby.html">lobby</a></li><li><a href="states.mainMenu.html">mainMenu</a></li><li><a href="states.play.html">play</a></li><li><a href="TableZone.html">TableZone</a></li></ul><h3>Namespaces</h3><ul><li><a href="Animations.html">Animations</a></li></ul><h3>Global</h3><ul><li><a href="global.html#attackSignal">attackSignal</a></li><li><a href="global.html#cardDeathSignal">cardDeathSignal</a></li><li><a href="global.html#dynamicImageLoad">dynamicImageLoad</a></li><li><a href="global.html#onAttack">onAttack</a></li><li><a href="global.html#onDeath">onDeath</a></li><li><a href="global.html#onSpawn">onSpawn</a></li><li><a href="global.html#spawnSignal">spawnSignal</a></li><li><a href="global.html#TABLE_ZONES">TABLE_ZONES</a></li><li><a href="global.html#VIEWPORT_H">VIEWPORT_H</a></li><li><a href="global.html#VIEWPORT_W">VIEWPORT_W</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Sun Aug 02 2015 02:46:50 GMT+0500 (GMT+05:00)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Sun Aug 02 2015 22:09:12 GMT+0500 (GMT+05:00)
 </footer>
 
 <script> prettyPrint(); </script>

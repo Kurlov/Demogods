@@ -17,6 +17,7 @@
 * `addPlayer1Card(id, imageUrl)` - adds a card to first players' deck. **Id** must be unique string(still no checking implemented though), **imageUrl** is used for dynamic image loads (not implemented too, so it doesn't matter right now); sprite defined by id, which should be the same as image id preloaded during preload state; returns Card object; 
 * `addPlayer2Card(id, imageUrl)` - same for player 2;  
 * `addMonster(id, imageUrl, health)` - like player's deck, adds item to playing table (center of the screen). **Health** is a number.  Returns Monster object;
+* `addOpponentsMonster(id, imageUrl, health)` - same for opponents monster
 * `deletePlayer1Card(id)` - deletes card from first players' deck, specified by **id**;  returns `true` if successful;
 * `deletePlayer2Card(id)` - same for the second player;  
 * `deleteMonster(id)` - same for playing table;  

@@ -151,6 +151,9 @@ PlayerDeck.prototype.constructor = TableZone;
  * @arg {string} id Unique element id
  * @arg {string} imageUrl URL of an image, whil will be shown ingame
  * @arg {string} attackType Defines attack animation
+ * @arg {number} price Price of the {@link Card} being added
+ * @arg {number} attackLevel Attack points of the {@link Card} being added
+ * @arg {number} health Halth points pf the {@link Card} being added
  * @returns {Card} Element being added
  */
 PlayerDeck.prototype.addItem = function (id, imageUrl, attackType, price, attackLevel, health) {
@@ -162,11 +165,20 @@ PlayerDeck.prototype.addItem = function (id, imageUrl, attackType, price, attack
     return item;
 };
 
+/**
+ * @method PlayedDeck#onCardDeath
+ * @desc Card death event handler
+ * @param {Card} card Card being destroyed
+ */
 PlayerDeck.prototype.onCardDeath = function(card) {
     this.deleteItem(card.id);
     this.redrawItems();
 };
 
+/**
+ * @method PlayerDeck#update
+ * @desc Calls update method of all card in this deck
+ */
 PlayerDeck.prototype.update = function() {
     for (var i = 0; i < this.items.length; i++) {
         this.items[i].update();
@@ -177,7 +189,8 @@ PlayerDeck.prototype.update = function() {
  * @class
  * @classdesc PlayingArea class. Implements zone responsible for center of the screen, where deployed monsters belong.
  * @arg {string} backgroundImage URL to image, which will be rendered as zone's background
- * @arg {boolean} bottom Should it be rendered on bottom of the screen?
+ * @arg {number} x X coordinate of this area (top-left corner)
+ * @arg {number} y Y coordinate of this area (top-left corner)
  * @extends TableZone
  */
 function PlayingArea(backgroundImage, x, y) {
@@ -203,8 +216,10 @@ PlayingArea.prototype.constructor = TableZone;
  * @arg {string} id Unique element id
  * @arg {string} imageUrl URL of an image, which will be shown ingame
  * @arg {string} attackType Defines attack animation
- * @arg {number} attackLevel Attack points
+ * @arg {number} health Health points of {@link Monster} being added
+ * @arg {number} attackLevel Attack points of {@link Monster} being added
  * @returns {Monster} Element being added
+ * @override
  */
 PlayingArea.prototype.addItem = function (id, imageUrl, attackType, health, attackLevel) {
     var item = new Monster(id, imageUrl, this.elementWidth * this.items.length + this.elementWidth + this.x, this.y + Math.floor(this.sprite.height / 4), attackType);
@@ -215,11 +230,13 @@ PlayingArea.prototype.addItem = function (id, imageUrl, attackType, health, atta
 };
 
 /**
- * @method PlayerDeck#addopponentItem
- * @desc Adds {@link Monster} to player's deck
+ * @method PlayerDeck#addOpponentItem
+ * @desc Adds {@link Monster} to opponent's deck
  * @arg {string} id Unique element id
  * @arg {string} imageUrl URL of an image, which will be shown ingame
  * @arg {string} attackType Defines attack animation
+ * @arg {number} health Health points of {@link Monster} being added
+ * @arg {number} attackLevel Attack points of {@link Monster} being added
  * @returns {Monster} Element being added
  */
 PlayingArea.prototype.addOpponentItem = function (id, imageUrl, attackType, health, attackLevel) {
@@ -228,6 +245,39 @@ PlayingArea.prototype.addOpponentItem = function (id, imageUrl, attackType, heal
     item.setAttack(attackLevel);
     this.opponentItems.push(item);
     return item;
+};
+
+/**
+ * @method PlayingArea#moveToPositionOp
+ * @desc moves an  opponent's item to a new position
+ * @param {string} id Id of item being moved
+ * @param {number} position New position of element
+ */
+PlayingArea.prototype.moveToPositionOp = function(id, position) {
+    var index = this.getOpItemIndex(id);
+    if ((index != position) && (position < this.items.length)) {
+        var item = this.opponentItems[index];
+        this.opponentItems.splice(index, 1);
+        this.opponentItems.splice(position, 0, item);
+    }
+};
+
+
+/**
+ * @method PlayingArea#getOpItemIndex
+ * @desc Finds index of opponent's item by it's id in items array
+ * @arg {string} id Id of element
+ * @returns {number} Returns index of item, -1 otherwise
+ */
+PlayingArea.prototype.getOpItemIndex = function (id) {
+    var index = -1;
+    for (var i = 0; i < this.opponentItems.length; i++) {
+        if (this.opponentItems[i].id === id) {
+            index = i;
+            break;
+        }
+    }
+    return index;
 };
 
 /**
@@ -246,7 +296,7 @@ PlayingArea.prototype.update = function() {
 
 /**
  * @method PlayingArea#deleteOpponentItem
- * @desc Deletes opponnet's item from the TableZone
+ * @desc Deletes opponent's item from the TableZone
  * @arg {string} id Id of element being deleted
  * @returns {boolean} Returns true if successful
  */
@@ -261,6 +311,12 @@ PlayingArea.prototype.deleteOpponentItem = function(id) {
     }
 };
 
+/**
+ * @method PlayingArea#hetOpponentItemIndex
+ * @desc Find index of opponent's {@link Monster} by given id
+ * @param id Id of {@link Monster}
+ * @returns {number}
+ */
 PlayingArea.prototype.getOpponentItemIndex = function (id) {
     var index = -1;
     for (var i = 0; i < this.opponentItems.length; i++) {
@@ -272,6 +328,11 @@ PlayingArea.prototype.getOpponentItemIndex = function (id) {
     return index;
 };
 
+/**
+ * @method PlayingArea#cardHandler
+ * @desc Card release event handler
+ * @param {Card} card Card Being released
+ */
 PlayingArea.prototype.cardHandler = function(card) {
     if (Phaser.Rectangle.intersects(new Phaser.Rectangle(card.sprite.x, card.sprite.y, 2, 2),
             this.sprite.getBounds())) {

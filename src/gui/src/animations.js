@@ -1,8 +1,20 @@
 /**
  * @global
+ * @namespace Animations
  * @desc Animation object. Stores functions responsible for animation.
+ * @static
  */
 var Animations = {
+    /**
+     *
+     * @function energyBall
+     * @memberof Animations
+     * @static
+     * @desc Plays energy ball attack animation from item to target
+     * @param {PlayingElement} item Attacker object
+     * @param {PlayingElement} target Target object
+     * @returns {Phaser.Tween}
+     */
     energyBall: function(item, target) {
       var energyBall = game.add.image(item.sprite.x, item.sprite.y, 'energy_ball');
       energyBall.anchor = new Phaser.Point(0.5, 0.5);
@@ -15,7 +27,16 @@ var Animations = {
       tween.onComplete.add(d);
       return tween.start();
     },
-    
+
+    /**
+     * @function lightning
+     * @memberof Animations
+     * @static
+     * @desc Plays ligntning attack animation frpm item to target
+     * @param {PlayingElement} item Attacker object
+     * @param {PlayingElement} target Target object
+     * @returns {Phaser.Tween}
+     */
     lightning: function(item, target) {
         var lightning1 = game.add.rope(0, 0, 'lightning1', null, [new Phaser.Point(item.sprite.x, item.sprite.y), new Phaser.Point(target.sprite.x, target.sprite.y)]);
         var lightning2 = game.add.rope(0, 0, 'lightning2', null, [new Phaser.Point(item.sprite.x, item.sprite.y), new Phaser.Point(target.sprite.x, target.sprite.y)]);
@@ -88,6 +109,12 @@ var Animations = {
         return tween1.start();
     },
 
+    /**
+     * @function spawn
+     * @memberof Animations
+     * @desc Plays card activation animation
+     * @param {Card} card Card being activated
+     */
     spawn: function(card) {
         //card.sprite.visible = false;
         var sparks = game.add.emitter(card.sprite.x, card.sprite.y, 10);

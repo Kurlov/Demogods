@@ -149,7 +149,7 @@ states.play.prototype.preload = function() {
     //static
     this.load.image('player', 'assets/cards/player.png');
     this.load.image('player1', 'assets/cards/player1.png');
-    this.load.image('monster', 'assets/cards/monster.png');
+    //this.load.image('monster', 'assets/cards/monster.png');
     this.load.image('player_deck', 'assets/cards/playerDeck.png');
     this.load.image('player_deck1', 'assets/cards/playerDeck.png');
     this.load.image('playing_table', 'assets/cards/playingTable.png');
@@ -355,6 +355,20 @@ GUI.prototype.deleteMonster = function(id) {
 };
 
 /**
+ * @method GUI#deleteOpponentMonster
+ * @desc Deletes opponent's monster from the playing table
+ * @arg id Id of the monster being deleted
+ * @returns {boolean} True if successful, false otherwise
+ */
+GUI.prototype.deleteOpponentMonster = function(id) {
+    if (game.state.current === 'play') {
+        return game.state.getCurrentState().playingTable.deleteOpponentItem(id);
+    } else {
+        return false;
+    }
+};
+
+/**
  * @method GUI#setPlayer1Health
  * @desc Sets the first player's health
  * @arg {number} health Desired health level
@@ -419,6 +433,19 @@ GUI.prototype.moveMonster = function(id, position) {
 
     }
 };
+/**
+ * @method GUI#moveOpponentMonster
+ * @desc Move opponent's monster to another position
+ * @param {string} id Id of item being moved
+ * @param {number} position New position of item
+ */
+GUI.prototype.moveOpponentMonster = function(id, position) {
+    if (game.state.current === 'play') {
+        game.state.getCurrentState().playingTable.moveToPositionOp(id, position);
+
+    }
+};
+
 /**
  * @method GUI#attack
  * @desc Manually trigger attack action
